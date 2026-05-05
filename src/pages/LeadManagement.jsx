@@ -18,6 +18,26 @@ const LeadManagement = () => {
     `http://localhost:3001/leads/${leadId}/comments`,
   );
 
+  const deletedLead = async (leadId) => {
+    try {
+      const res = await fetch(`http://localhost:3001/leads/${leadId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await res.json()
+      if(res.ok){
+        console.log('Deleted Sucess:', res.message)
+      }else{
+        console.error('Error: ', res.message)
+      }
+    } catch (error) {
+      throw error
+    }
+  };
+
   const displayComments =
     comments.length > 0 ? comments : leadComment?.data || [];
 
@@ -115,38 +135,40 @@ const LeadManagement = () => {
               </p>
               <hr />
               <div className="d-flex flex-row justify-content-center gap-4">
-                <Link to={``} className="btn btn-primary">
+                <Link
+                  to={`/edited/${leadDetails?._id}`}
+                  className="btn btn-primary"
+                >
                   <h6 className="fs-bold d-inline">Edit Lead</h6>
                 </Link>
-                <Link to={``} className="btn btn-primary">
+                <Link to={`/leads`} onClick={deletedLead(leadDetails?._id)} className="btn btn-primary">
                   <h6 className="fs-bold d-inline">Delete Lead</h6>
                 </Link>
               </div>
-              <hr />
+              <hr /> 
               <div>
                 <h5 className="text-center">Comment Section</h5>
                 <div width="100%">
                   {displayComments.map((comment) => {
-                    const date = new Date(comment.createdAt)
+                    const date = new Date(comment.createdAt);
                     return (
-
                       <div
-                      className="d-flex justify-content-between"
-                      key={comment._id}
-                    >
-                      <div className="d-flex flex-column">
-                        <p className="d-inline m-0">
-                          <b>Name: </b>
-                          {comment.author.name}
-                        </p>
-                        <p className="d-inline mb-3">
-                          <b>Comment: </b>
-                          {comment.commentText}
-                        </p>
+                        className="d-flex justify-content-between"
+                        key={comment._id}
+                      >
+                        <div className="d-flex flex-column">
+                          <p className="d-inline m-0">
+                            <b>Name: </b>
+                            {comment.author.name}
+                          </p>
+                          <p className="d-inline mb-3">
+                            <b>Comment: </b>
+                            {comment.commentText}
+                          </p>
+                        </div>
+                        <div className="">{date.toLocaleString()}</div>
                       </div>
-                      <div className="">{date.toLocaleString()}</div>
-                    </div>
-                )
+                    );
                   })}
                 </div>
                 <hr />

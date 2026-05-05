@@ -19,6 +19,14 @@ const Leads = () => {
         : lead.timeToClose === Number(selectedCloseTime),
     );
 
+  console.log(leads);
+
+  const uniqueAgents = [
+    ...new Map(
+      leads?.map((lead) => [lead.salesAgent?.name, lead.salesAgent?.name]),
+    ).values(),
+  ];
+
   return (
     <>
       <LeadListHeader />
@@ -50,23 +58,36 @@ const Leads = () => {
                 className="d-flex column-gap-3 flex-wrap overflow-auto"
                 style={{ flex: 1, minHeight: 0 }}
               >
-                {bothFilteredLead?.map((lead) => (
-                  console.log(typeof lead._id),
-                  <div key={lead._id} className="border p-2 m-1 bg-light" style={{  width: '30%', height: '10rem' }}>
-                    <p className="m-0">
-                      <strong>{lead.name}</strong>
-                    </p>
-                    <p className="m-0">
-                      <b>Status:</b> {lead.status}
-                    </p>
-                    <p>
-                      <b>Name: </b>
-                      {lead.salesAgent.name}
-                    </p>
-                    <Link className="btn btn-primary mb-3" to={`/leads/${lead._id}`}>Lead Details</Link>
-                    <br />
-                  </div>
-                ))}
+                {bothFilteredLead?.map(
+                  (lead) => (
+                    console.log(typeof lead._id),
+                    (
+                      <div
+                        key={lead._id}
+                        className="border p-2 m-1 bg-light"
+                        style={{ width: "30%", height: "10rem" }}
+                      >
+                        <p className="m-0">
+                          <strong>{lead.name}</strong>
+                        </p>
+                        <p className="m-0">
+                          <b>Status:</b> {lead.status}
+                        </p>
+                        <p>
+                          <b>Name: </b>
+                          {lead.salesAgent.name}
+                        </p>
+                        <Link
+                          className="btn btn-primary mb-3"
+                          to={`/leads/${lead._id}`}
+                        >
+                          Lead Details
+                        </Link>
+                        <br />
+                      </div>
+                    )
+                  ),
+                )}
               </div>
               <hr />
 
@@ -80,10 +101,10 @@ const Leads = () => {
                   onChange={(e) => setSelectedAgent(e.target.value)}
                 >
                   <option value="none">Filter By Sales Agent</option>
-                  {leads?.map((lead) => (
+                  {uniqueAgents?.map((agent) => (
                     <>
-                      <option value={lead.salesAgent.name}>
-                        {lead.salesAgent.name}
+                      <option value={agent} key={agent}>
+                        {agent}
                       </option>
                     </>
                   ))}
@@ -112,7 +133,9 @@ const Leads = () => {
               </div>
 
               <div className="mt-4">
-                <Link to={`/addleadform`}  className="btn btn-primary">Add New Lead </Link>
+                <Link to={`/addleadform`} className="btn btn-primary">
+                  Add New Lead{" "}
+                </Link>
               </div>
             </div>
           </div>
