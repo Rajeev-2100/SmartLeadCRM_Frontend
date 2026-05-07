@@ -26,6 +26,10 @@ const AddNewAgents = () => {
       });
       const data = await res.json();
       console.log("Data: ", data);
+      if(data){
+        alert('Successfully added the New Agent')
+      }
+      
     } catch (error) {
       throw error;
     }
@@ -67,7 +71,7 @@ const AddNewAgents = () => {
                     className="form-control form-control-lg"
                     type="text"
                     placeholder="Enter your Name"
-                    value={name}
+                    value={name || ""}
                     onChange={(e) => setName(e.target.value)}
                     aria-label=".form-control-lg example"
                   />
@@ -81,7 +85,7 @@ const AddNewAgents = () => {
                     className="form-control form-control-lg"
                     type="text"
                     placeholder="Enter your Email"
-                    value={email}
+                    value={email || ""}
                     onChange={(e) => setEmail(e.target.value)}
                     aria-label=".form-control-lg example"
                   />

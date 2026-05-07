@@ -35,6 +35,10 @@ const LeadStatusView = () => {
     ...new Map(leads?.map((l) => [l.priority, l.priority])).values(),
   ];
 
+   const uniqueTimes = [
+    ...new Map(leads?.map((lead) => [lead.timeToClose, lead])).values()
+  ]
+
   return (
     <>
       <LeadStatusHeader />
@@ -132,7 +136,7 @@ const LeadStatusView = () => {
                   onChange={(e) => setSelectedCloseTime(e.target.value)}
                 >
                   <option value="none">Select the time</option>
-                  {leads?.map((lead) => (
+                  {uniqueTimes?.map((lead) => (
                     <>
                       <option value={lead.timeToClose}>
                         {lead.timeToClose}

@@ -5,13 +5,17 @@ import LeadContext from "../context/LeadContext";
 import { Link } from "react-router-dom";
 import useFetch from "../useFetch";
 import ManagementHeader from "../components/Header/ManagementHeader";
+import AgentsContext from "../context/AgentsContext";
 
 const LeadManagement = () => {
   const [formData, setFormData] = useState({});
   const { leads } = useContext(LeadContext);
-  const [selectedAuthor, setSelectedAuthor] = useState("");
+  const { agents } = useContext(AgentsContext);
+
+  const [selectedAuthorId, setSelectedAuthorId] = useState();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  console.log(comments);
   const { leadId } = useParams();
   const leadDetails = leads?.find((lead) => lead._id === leadId);
   const { data: leadComment } = useFetch(
@@ -27,16 +31,19 @@ const LeadManagement = () => {
         },
       });
 
-      const data = await res.json()
-      if(res.ok){
-        console.log('Deleted Sucess:', res.message)
-      }else{
-        console.error('Error: ', res.message)
+      const data = await res.json();
+      console.log("Data: ", data);
+      if (data) {
+        alert("Details deleted successfully");
+        console.log("Deleted Sucess:", res.message);
+      } else {
+        console.error("Error: ", res.message);
       }
     } catch (error) {
-      throw error
+      throw error;
     }
   };
+
 
   const displayComments =
     comments.length > 0 ? comments : leadComment?.data || [];
@@ -44,10 +51,19 @@ const LeadManagement = () => {
   const formCommentSubmit = async (e) => {
     e.preventDefault();
 
+    if (!comment.trim()  === "") {
+      alert("Comment cannot be empty");
+      return;
+    }
+
+    if (!selectedAuthorId) {
+      alert("Please select author");
+      return;
+    }
+
     const payload = {
-      lead: leadId,
       commentText: comment,
-      author: selectedAuthor,
+      author: selectedAuthorId,
     };
 
     try {
@@ -63,23 +79,30 @@ const LeadManagement = () => {
       );
 
       const data = await res.json();
+      // console.log(data);
 
-      if (leadComment?.data && comments.length === 0) {
-        setComments(leadComment.data);
+      if (res.ok) {
+        alert("New Comment Added successfully");
+        const selectedAgent = agents.find(
+          (agent) => agent._id === selectedAuthorId,
+        );
+
+        const newComment = {
+          ...data.data,
+          author: selectedAgent,
+        };
+
+        setComments((prev) => [...prev, newComment]);
+        setComment("");
+        setSelectedAuthorId("");
       }
-
-      setComments((prev) => [...prev, data?.data]);
-      setComment("");
-      setSelectedAuthor("");
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  console.log(displayComments);
-
   const uniqueAgents = [
-    ...new Map(leads?.map((l) => [l.salesAgent._id, l.salesAgent])).values(),
+    ...new Map(agents?.map((agent) => [agent.name, agent])).values(),
   ];
 
   return (
@@ -109,30 +132,32 @@ const LeadManagement = () => {
               className="w-75 mt-3 d-flex flex-column py-5"
               style={{ height: "100%" }}
             >
-              <p className="fs-5">
-                <strong>Lead Name: </strong>
-                {leadDetails?.name}
-              </p>
-              <p className="fs-5">
-                <strong>Sales Agent: </strong>
-                {leadDetails?.salesAgent.name}
-              </p>
-              <p className="fs-5">
-                <strong>Lead Source: </strong>
-                {leadDetails?.source}
-              </p>
-              <p className="fs-5">
-                <strong>Lead Status: </strong>
-                {leadDetails?.status}
-              </p>
-              <p className="fs-5">
-                <strong>Priority: </strong>
-                {leadDetails?.priority}
-              </p>
-              <p className="fs-5">
-                <strong>Time to Close: </strong>
-                {leadDetails?.timeToClose}
-              </p>
+              <div>
+                <p className="fs-5">
+                  <strong>Lead Name: </strong>
+                  {leadDetails?.name}
+                </p>
+                <p className="fs-5">
+                  <strong>Sales Agent: </strong>
+                  {leadDetails?.salesAgent.name}
+                </p>
+                <p className="fs-5">
+                  <strong>Lead Source: </strong>
+                  {leadDetails?.source}
+                </p>
+                <p className="fs-5">
+                  <strong>Lead Status: </strong>
+                  {leadDetails?.status}
+                </p>
+                <p className="fs-5">
+                  <strong>Priority: </strong>
+                  {leadDetails?.priority}
+                </p>
+                <p className="fs-5">
+                  <strong>Time to Close: </strong>
+                  {leadDetails?.timeToClose}
+                </p>
+              </div>
               <hr />
               <div className="d-flex flex-row justify-content-center gap-4">
                 <Link
@@ -141,15 +166,19 @@ const LeadManagement = () => {
                 >
                   <h6 className="fs-bold d-inline">Edit Lead</h6>
                 </Link>
-                <Link to={`/leads`} onClick={deletedLead(leadDetails?._id)} className="btn btn-primary">
+                <Link
+                  to={`/leads`}
+                  onClick={() => deletedLead(leadDetails?._id)}
+                  className="btn btn-primary"
+                >
                   <h6 className="fs-bold d-inline">Delete Lead</h6>
                 </Link>
               </div>
-              <hr /> 
+              <hr />
               <div>
                 <h5 className="text-center">Comment Section</h5>
                 <div width="100%">
-                  {displayComments.map((comment) => {
+                  {displayComments?.map((comment) => {
                     const date = new Date(comment.createdAt);
                     return (
                       <div
@@ -182,10 +211,10 @@ const LeadManagement = () => {
                     </label>
                     <select
                       name="author"
-                      id="author"
-                      onChange={(e) => setSelectedAuthor(e.target.value)}
+                      value={selectedAuthorId}
+                      onChange={(e) => setSelectedAuthorId(e.target.value)}
                     >
-                      <option value="">Select Author: </option>
+                      <option value="">Select Author</option>
                       {uniqueAgents.map((agent) => (
                         <option key={agent._id} value={agent._id}>
                           {agent.name}

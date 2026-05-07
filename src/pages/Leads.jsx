@@ -3,9 +3,12 @@ import { useContext, useState } from "react";
 import LeadContext from "../context/LeadContext";
 import { Link } from "react-router-dom";
 import LeadListHeader from "../components/Header/LeadListHeader";
+import AgentsContext from "../context/AgentsContext";
 
 const Leads = () => {
   const { leads } = useContext(LeadContext);
+  const { agents } = useContext(AgentsContext);
+
   const [selectedAgent, setSelectedAgent] = useState("none");
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
 
@@ -19,14 +22,16 @@ const Leads = () => {
         : lead.timeToClose === Number(selectedCloseTime),
     );
 
-  console.log(leads);
+  const uniqueTimes = [
+    ...new Map(leads?.map((agent) => [agent.timeToClose, agent])).values()
+  ]
 
   const uniqueAgents = [
-    ...new Map(
-      leads?.map((lead) => [lead.salesAgent?.name, lead.salesAgent?.name]),
-    ).values(),
+    ...new Map(agents?.map((agent) => [agent.name, agent])).values(),
   ];
 
+  console.log('Times: ',uniqueTimes);
+  
   return (
     <>
       <LeadListHeader />
@@ -103,8 +108,8 @@ const Leads = () => {
                   <option value="none">Filter By Sales Agent</option>
                   {uniqueAgents?.map((agent) => (
                     <>
-                      <option value={agent} key={agent}>
-                        {agent}
+                      <option value={agent.name} key={agent._id}>
+                        {agent.name}
                       </option>
                     </>
                   ))}
@@ -122,10 +127,10 @@ const Leads = () => {
                   onChange={(e) => setSelectedCloseTime(e.target.value)}
                 >
                   <option value="none">Priority </option>
-                  {leads?.map((lead) => (
+                  {uniqueTimes?.map((agent) => (
                     <>
-                      <option value={lead.timeToClose}>
-                        {lead.timeToClose}
+                      <option value={agent?.timeToClose} key={agent._id}>
+                        {agent?.timeToClose}
                       </option>
                     </>
                   ))}

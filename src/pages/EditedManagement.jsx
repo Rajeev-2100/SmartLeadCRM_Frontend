@@ -3,18 +3,21 @@ import EditedManagementHeader from "../components/Header/EditedManagementHeader"
 import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
 import LeadContext from "../context/LeadContext";
+import AgentsContext from "../context/AgentsContext";
 
 const EditedManagement = () => {
   const { leadId } = useParams();
   const { leads } = useContext(LeadContext);
-  const leadDetails = leads?.find((lead) => lead._id === leadId);
+  const { agents } = useContext(AgentsContext);
+  const leadDetails = leads?.find((lead) => lead._id == leadId);
+
   const [formData, setFormData] = useState({
     name: "",
     source: "",
     salesAgent: "",
     status: "",
     priority: "",
-    timeToClose: 0,
+    timeToClose: 1,
     tags: "",
   });
 
@@ -46,6 +49,8 @@ const EditedManagement = () => {
     const { name, source, salesAgent, status, priority, timeToClose, tags } =
       formData;
 
+    // console.log(formData);
+
     if (
       !name ||
       !source ||
@@ -69,22 +74,35 @@ const EditedManagement = () => {
       });
 
       const data = await res.json();
-      console.log("Data: ", data);
+      // console.log("Data: ", data);
 
-      alert("Lead updated successfully");
+      if (res.ok) {
+        alert("Lead updated successfully");
+        setFormData({
+          name: "",
+          source: "",
+          salesAgent: salesAgent._id || "",
+          status: "",
+          priority: "",
+          timeToClose: 1,
+          tags: "",
+        });
+        return;
+      }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       alert("Something went wrong");
     }
   };
 
   const uniqueAgents = [
-    ...new Map(leads?.map((l) => [l.salesAgent._id, l.salesAgent])).values(),
+    ...new Map(agents?.map((agent) => [agent.name, agent])).values(),
   ];
   const uniquePriorities = [...new Set(leads?.map((lead) => lead.priority))];
   const uniqueStatus = [...new Set(leads?.map((lead) => lead.status))];
   const uniqueSources = [...new Set(leads?.map((l) => l.source))];
-  const uniqueTags = [...new Set(leads?.map((l) => l.tags))];
+  const uniqueTags = [...new Set(leads?.flatMap((l) => l.tags || []))];
+  // console.log("Unique Agents: ", uniqueAgents);
 
   return (
     <>
@@ -123,10 +141,9 @@ const EditedManagement = () => {
                   <input
                     type="text"
                     onChange={handleChange}
-                    placeholder="Name"
                     className="form-control"
-                    id="name"
-                    value={formData?.name}
+                    name="name"
+                    value={formData?.name || ""}
                   />
                 </div>
                 <div className="mb-3">
@@ -138,8 +155,9 @@ const EditedManagement = () => {
                     id="source"
                     className="form-select"
                     onChange={handleChange}
-                    value={formData?.source}
+                    value={formData?.source || ""}
                   >
+                    <option value="">Select the source</option>
                     {uniqueSources?.map((src, i) => (
                       <>
                         <option key={i} value={src}>
@@ -156,13 +174,14 @@ const EditedManagement = () => {
                   <select
                     name="salesAgent"
                     id="salesAgent"
-                    value={formData?.salesAgent?.name}
+                    value={formData?.salesAgent || ""}
                     className="form-select"
                     onChange={handleChange}
                   >
+                    <option value="">Select the Agent</option>
                     {uniqueAgents?.map((agent) => (
                       <>
-                        <option value={agent.salesAgent?._id}>
+                        <option key={agent._id} value={agent._id}>
                           {agent.name}
                         </option>
                       </>
@@ -176,10 +195,11 @@ const EditedManagement = () => {
                   <select
                     name="status"
                     id="status"
-                    value={formData.status}
+                    value={formData.status || ""}
                     className="form-select"
                     onChange={handleChange}
                   >
+                    <option value="">Select the Status</option>
                     {uniqueStatus?.map((status, index) => (
                       <>
                         <option value={status} key={index}>
@@ -196,13 +216,14 @@ const EditedManagement = () => {
                   <select
                     name="priority"
                     id="leadPriority"
-                    value={formData.priority}
+                    value={formData?.priority || ""}
                     className="form-select"
                     onChange={handleChange}
                   >
+                    <option value="">Select the Priority</option>
                     {uniquePriorities?.map((pri, index) => (
                       <>
-                        <option value={formData?.priority} key={index}>
+                        <option value={pri} key={index}>
                           {pri}
                         </option>
                       </>
@@ -218,7 +239,7 @@ const EditedManagement = () => {
                     type="number"
                     name="timeToClose"
                     placeholder="Days to Close"
-                    value={formData?.timeToClose}
+                    value={formData?.timeToClose || ""}
                     onChange={handleChange}
                   />
                 </div>
@@ -228,11 +249,12 @@ const EditedManagement = () => {
                   </label>
                   <select
                     name="tags"
-                    value={formData.tags}
+                    value={formData?.tags || ""}
                     id="leadTags"
                     className="form-select"
                     onChange={handleChange}
                   >
+                    <option value="">Select the tag</option>
                     {uniqueTags?.map((tag, i) => (
                       <>
                         <option key={i} value={tag}>

@@ -36,6 +36,7 @@ const AddLeadForm = () => {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
+      console.log('Data: ',data)
       if (
         name !== "" &&
         leadSource !== "" &&
@@ -45,10 +46,9 @@ const AddLeadForm = () => {
         timeToClose !== 0 &&
         tags !== ""
       ) {
+        alert('Successfully Added the Lead Details')
         setFormData(true);
       }
-
-      console.log("Data: ", data);
 
       setName("");
       setLeadSource("");
@@ -61,6 +61,18 @@ const AddLeadForm = () => {
       throw error;
     }
   };
+
+  const uniqueTags = [
+    ...new Set(leads?.flatMap((lead) => lead.tags))
+  ]
+
+  // console.log(uniqueTags)
+
+  const uniqueSources = [
+    ...new Set(leads?.map((lead) => lead.source)).values()
+  ]
+
+  // console.log(uniqueSources)
 
   const uniqueAgents = [
     ...new Map(leads?.map((l) => [l.salesAgent._id, l.salesAgent])).values(),
@@ -100,13 +112,14 @@ const AddLeadForm = () => {
               <select
                 name="leadSource"
                 id="leadSource"
+                value={leadSource || ""}
                 className="form-select"
                 onChange={(e) => setLeadSource(e.target.value)}
               >
                 <option value="none">Select Lead Source</option>
-                {leads?.map((lead) => (
+                {uniqueSources?.map((source, index) => (
                   <>
-                    <option value={lead.source}>{lead.source}</option>
+                    <option value={source} key={index}>{source}</option>
                   </>
                 ))}
               </select>
@@ -118,6 +131,7 @@ const AddLeadForm = () => {
               <select
                 name="salesAgent"
                 id="salesAgent"
+                value={salesAgentId || ""}
                 className="form-select"
                 onChange={(e) => setSalesAgentId(e.target.value)}
               >
@@ -136,6 +150,7 @@ const AddLeadForm = () => {
               <select
                 name="status"
                 id="leadStatus"
+                value={status || ""}
                 className="form-select"
                 onChange={(e) => setStatus(e.target.value)}
               >
@@ -156,6 +171,7 @@ const AddLeadForm = () => {
               <select
                 name="priority"
                 id="leadPriority"
+                value={priority || ""}
                 className="form-select"
                 onChange={(e) => setPriority(e.target.value)}
               >
@@ -177,6 +193,7 @@ const AddLeadForm = () => {
               <input
                 type="number"
                 id="timeToClose"
+                value={timeToClose || ""}
                 placeholder="Days to Close"
                 onChange={(e) => setTimeToClose(e.target.value)}
               />
@@ -189,12 +206,13 @@ const AddLeadForm = () => {
                 name="tags"
                 id="leadTags"
                 className="form-select"
+                value={tags || ""}
                 onChange={(e) => setTags(e.target.value)}
               >
                 <option value="none">Select Tag</option>
-                {leads?.map((lead) => (
+                {uniqueTags?.map((tag, index) => (
                   <>
-                    <option value={lead.tags}>{lead.tags}</option>
+                    <option value={tag} key={index}>{tag}</option>
                   </>
                 ))}
               </select>

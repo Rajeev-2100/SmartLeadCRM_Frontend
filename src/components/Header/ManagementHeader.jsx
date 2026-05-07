@@ -7,7 +7,7 @@ const ManagementHeader = () => {
   const { leads } = useContext(LeadContext)
 
   const filteredLead = leads?.find((lead) => lead._id == leadId)
-  console.log(filteredLead)
+  // console.log(filteredLead)
 
   return (
     <>
