@@ -7,15 +7,17 @@ import useFetch from "../useFetch";
 
 const LeadStatusView = () => {
   const [statusValue, setStatusValue] = useState("none");
-  const { leadStatus, leads } = useContext(LeadContext);
+  const { leadsStatus, allLeads } = useContext(LeadContext);
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
   const [priorityValue, setPriorityValue] = useState("none");
+
+  // console.log('LeadStatus: ', leadsStatus)
 
   const { data: priority } = useFetch(
     `http://localhost:3001/leads/${statusValue}`,
   );
 
-  const allFilteredLead = leads
+  const allFilteredLead = allLeads
     ?.filter((lead) =>
       statusValue === "none" ? true : lead.status === statusValue,
     )
@@ -23,20 +25,18 @@ const LeadStatusView = () => {
       priorityValue === "none" ? true : lead.priority === priorityValue,
     )
     ?.filter((lead) =>
-      selectedCloseTime === "none"
-        ? true
-        : lead.timeToClose === Number(selectedCloseTime),
+      selectedCloseTime === "none" ? true : lead.timeToClose === Number(selectedCloseTime),
     );
 
   const isFilteredApplied = statusValue !== "none" || priorityValue !== "none" || selectedCloseTime !== "none" ? true : false
-  const displayFilteredValue = isFilteredApplied ? allFilteredLead : leads;
+  const displayFilteredValue = isFilteredApplied ? allFilteredLead : allLeads;
 
   const uniquePriority = [
-    ...new Map(leads?.map((l) => [l.priority, l.priority])).values(),
+    ...new Map(allLeads?.map((l) => [l.priority, l.priority])).values(),
   ];
 
    const uniqueTimes = [
-    ...new Map(leads?.map((lead) => [lead.timeToClose, lead])).values()
+    ...new Map(allLeads?.map((lead) => [lead.timeToClose, lead])).values()
   ]
 
   return (
@@ -77,7 +77,7 @@ const LeadStatusView = () => {
                   className="form-select"
                 >
                   <option value="none">Select Status</option>
-                  {leadStatus?.map((status) => (
+                  {leadsStatus?.map((status) => (
                     <>
                       <option value={status._id}>{status._id}</option>
                     </>

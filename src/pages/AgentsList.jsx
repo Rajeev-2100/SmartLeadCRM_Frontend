@@ -8,26 +8,26 @@ import useFetch from "../useFetch";
 
 const AgentsList = () => {
   const { agents } = useContext(AgentsContext);
-  const { leads } = useContext(LeadContext);
+  const { allLeads } = useContext(LeadContext);
 
   const [agentName, setAgentName] = useState('none')
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
   const [priorityValue, setPriorityValue] = useState("none");
 
-  const allFilteredLead = leads
-  ?.filter((lead) => agentName === "none" ? leads : lead.salesAgent.name === agentName)
-  ?.filter((lead) => priorityValue === "none" ? leads : lead.priority === priorityValue)
-  ?.filter((lead) => selectedCloseTime === "none" ? leads : lead.timeToClose == selectedCloseTime)
+  const allFilteredLead = allLeads
+  ?.filter((lead) => agentName === "none" ? allLeads : lead.salesAgent.name === agentName)
+  ?.filter((lead) => priorityValue === "none" ? allLeads : lead.priority === priorityValue)
+  ?.filter((lead) => selectedCloseTime === "none" ? allLeads : lead.timeToClose == selectedCloseTime)
 
   const isFilteredApplied = agentName !== "none" || priorityValue !== "none" || selectedCloseTime !== "none"  ? true : false
-  const displayFilteredValue = isFilteredApplied ? allFilteredLead : leads;
+  const displayFilteredValue = isFilteredApplied ? allFilteredLead : allLeads;
 
   const uniquePriority = [
-    ...new Map(leads?.map((l) => [l.priority, l.priority])).values(),
+    ...new Map(allLeads?.map((l) => [l.priority, l.priority])).values(),
   ];
 
   const uniqueTimes = [
-    ...new Map(leads?.map((lead) => [lead.timeToClose, lead])).values(),
+    ...new Map(allLeads?.map((lead) => [lead.timeToClose, lead])).values(),
   ];
 
   return (
