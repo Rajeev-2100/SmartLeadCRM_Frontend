@@ -2,85 +2,10 @@ import { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import LeadContext from "../context/LeadContext";
 import AddLeadFormHeader from "../components/Header/AddLeadFormHeader";
+import { useNavigate } from 'react-router-dom'
 
 const AddLeadForm = () => {
-  const { leads } = useContext(LeadContext);
-  const [formData, setFormData] = useState(false);
-  const [name, setName] = useState("");
-  const [leadSource, setLeadSource] = useState("");
-  const [salesAgentId, setSalesAgentId] = useState("");
-  const [status, setStatus] = useState("");
-  const [priority, setPriority] = useState("");
-  const [timeToClose, setTimeToClose] = useState(0);
-  const [tags, setTags] = useState("");
-
-  const formLeadHandler = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      name,
-      source: leadSource,
-      salesAgent: salesAgentId,
-      status,
-      priority,
-      timeToClose,
-      tags,
-    };
-
-    try {
-      const res = await fetch(`http://localhost:3001/leads`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      console.log('Data: ',data)
-      if (
-        name !== "" &&
-        leadSource !== "" &&
-        salesAgent !== "" &&
-        status !== "" &&
-        priority !== "" &&
-        timeToClose !== 0 &&
-        tags !== ""
-      ) {
-        alert('Successfully Added the Lead Details')
-        setFormData(true);
-      }
-
-      setName("");
-      setLeadSource("");
-      setSalesAgentId("");
-      setStatus("");
-      setPriority("");
-      setTimeToClose("");
-      setTags("");
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const uniqueTags = [
-    ...new Set(leads?.flatMap((lead) => lead.tags))
-  ]
-
-  // console.log(uniqueTags)
-
-  const uniqueSources = [
-    ...new Set(leads?.map((lead) => lead.source)).values()
-  ]
-
-  // console.log(uniqueSources)
-
-  const uniqueAgents = [
-    ...new Map(leads?.map((l) => [l.salesAgent._id, l.salesAgent])).values(),
-  ];
-
-  const uniquePriorities = [...new Set(leads?.map((lead) => lead.priority))];
-
-  const uniqueStatus = [...new Set(leads?.map((lead) => lead.status))];
+  const { leadsStatus, leads, name, setName, leadSource, setLeadSource, salesAgentId,  status, setStatus, setSalesAgentId, priority, setPriority, timeToClose, setTimeToClose, tags, setTags, formLeadHandler, uniqueTags, uniqueStatus, uniqueSources, uniquePriorities, uniqueAgents } = useContext(LeadContext);
 
   return (
     <>

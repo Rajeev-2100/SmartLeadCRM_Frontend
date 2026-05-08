@@ -7,14 +7,13 @@ import LeadContext from "./context/LeadContext.jsx";
 import MainHeader from "./components/Header/MainHeader.jsx";
 
 function App() {
-  const { leads, leadStatus } = useContext(LeadContext);
+  const { allLeads, leadsStatus, newLeadData } = useContext(LeadContext);
   const [selectedStatus, setSelectedStatus] = useState("none");
-  // console.log("Value: ", selectedStatus);
-
+  
   const filteredStatus =
     selectedStatus === "none" || selectedStatus === ""
-      ? leads
-      : leads?.filter((lead) => lead.status === selectedStatus);
+      ? allLeads 
+      : allLeads?.filter((lead) => lead.status === selectedStatus) || newLeadData?.filter((lead) => lead.status === selectedStatus)
 
   return (
     <>
@@ -90,7 +89,7 @@ function App() {
               <hr />
               <div className="d-flex flex-column">
                 <h5>Lead Status: </h5>
-                {leadStatus?.map((item) => (
+                {leadsStatus?.map((item) => (
                   <p key={item._id} className="m-0">
                     {item._id}: {item.count} Leads
                   </p>
@@ -108,7 +107,7 @@ function App() {
                   <option value="none" id="statusValue">
                     Filter By Status
                   </option>
-                  {leadStatus?.map((status) => (
+                  {leadsStatus?.map((status) => (
                     <>
                       <option key={status._id} value={status._id}>
                         {status._id}
