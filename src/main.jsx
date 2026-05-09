@@ -12,6 +12,7 @@ import AgentsList from "./pages/AgentsList.jsx";
 import AddNewAgents from "./pages/AddNewAgents.jsx";
 import LeadStatusView from "./pages/LeadStatusView.jsx";
 import EditedManagement from "./pages/EditedManagement.jsx";
+import Reports from "./pages/Reports.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/agents" element={<AgentsList />} />
           <Route path="/addNewAgents" element={<AddNewAgents/>}/>
           <Route path="/salesView" element={<LeadStatusView/>}/>
+          <Route path="/reports" element={<Reports/>}/>
         </Routes>
       </AgentsProvider>
     </LeadProvider>

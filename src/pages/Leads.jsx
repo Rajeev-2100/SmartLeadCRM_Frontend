@@ -8,6 +8,7 @@ import AgentsContext from "../context/AgentsContext";
 const Leads = () => {
   const { leads } = useContext(LeadContext);
   const { agents } = useContext(AgentsContext);
+  console.log(leads)
 
   const [selectedAgent, setSelectedAgent] = useState("none");
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
