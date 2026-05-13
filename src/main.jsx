@@ -13,6 +13,8 @@ import AddNewAgents from "./pages/AddNewAgents.jsx";
 import LeadStatusView from "./pages/LeadStatusView.jsx";
 import EditedManagement from "./pages/EditedManagement.jsx";
 import Reports from "./pages/Reports.jsx";
+import Setting from "./pages/Setting.jsx";
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -28,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/addNewAgents" element={<AddNewAgents/>}/>
           <Route path="/salesView" element={<LeadStatusView/>}/>
           <Route path="/reports" element={<Reports/>}/>
+          <Route path="/settings" element={<Setting/>} />
         </Routes>
       </AgentsProvider>
     </LeadProvider>

@@ -40,7 +40,7 @@ export const VerticalChart = () => {
   const { allLeads } = useContext(LeadContext);
   console.log(allLeads)
   const filteredLeads = allLeads?.filter((lead) => lead.status === "Closed") || []
-  const displayLeads = filteredLeads?.map((lead) => lead.salesAgent.name);
+  const displayLeads = filteredLeads?.map((lead) => lead.salesAgent?.name || "No Agent Assigned");
   const data = {
     labels: displayLeads,
     datasets: [

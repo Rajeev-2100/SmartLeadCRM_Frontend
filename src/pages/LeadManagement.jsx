@@ -139,7 +139,7 @@ const LeadManagement = () => {
                 </p>
                 <p className="fs-5">
                   <strong>Sales Agent: </strong>
-                  {leadDetails?.salesAgent.name}
+                  {leadDetails?.salesAgent?.name || "No Agent Assigned"}
                 </p>
                 <p className="fs-5">
                   <strong>Lead Source: </strong>

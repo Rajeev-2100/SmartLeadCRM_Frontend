@@ -93,7 +93,7 @@ const LeadStatusView = () => {
                     <div className="d-flex justify-content-between">
                       <p className="fs-5">{lead.name} </p>
                       <p>
-                        <b className="fs-6">{lead.salesAgent.name}</b>
+                        <b className="fs-6">{lead.salesAgent?.name || "No Agent Assigned"}</b>
                       </p>
                     </div>
                   </>

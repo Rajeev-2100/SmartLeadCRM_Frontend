@@ -31,7 +31,7 @@ const Leads = () => {
     ...new Map(agents?.map((agent) => [agent.name, agent])).values(),
   ];
 
-  console.log('Times: ',uniqueTimes);
+  console.log('Unique Agent: ', uniqueAgents);
   
   return (
     <>
@@ -66,7 +66,6 @@ const Leads = () => {
               >
                 {bothFilteredLead?.map(
                   (lead) => (
-                    console.log(typeof lead._id),
                     (
                       <div
                         key={lead._id}
@@ -81,7 +80,7 @@ const Leads = () => {
                         </p>
                         <p>
                           <b>Name: </b>
-                          {lead.salesAgent.name}
+                          {lead.salesAgent?.name || "Unassigned Agent"}
                         </p>
                         <Link
                           className="btn btn-primary mb-3"

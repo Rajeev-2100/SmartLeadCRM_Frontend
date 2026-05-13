@@ -6,16 +6,17 @@ const LeadContext = createContext();
 
 export function LeadProvider({ children }) {
   const { data } = useFetch(`http://localhost:3001/leads/`);
-  const leads = data?.data;
 
-  const { data: statusValue } = useFetch(`http://localhost:3001/leads/status-count`)
+  const leads = data?.data || [];
 
-  const leadsStatus = statusValue?.data
-  // console.log("Lead Status: ", leadStatus)
+  const { data: statusValue } = useFetch(
+    `http://localhost:3001/leads/status-count`,
+  );
 
+  const leadsStatus = statusValue?.data;
 
-  const [newLeadData, setNewLeadData] = useState([])
-  const [formData, setFormData] = useState(false);
+  const [newLeadData, setNewLeadData] = useState([]);
+
   const [name, setName] = useState("");
   const [leadSource, setLeadSource] = useState("");
   const [salesAgentId, setSalesAgentId] = useState("");
@@ -23,7 +24,10 @@ export function LeadProvider({ children }) {
   const [priority, setPriority] = useState("");
   const [timeToClose, setTimeToClose] = useState(0);
   const [tags, setTags] = useState("");
-  const navigation = useNavigate()
+
+  const navigation = useNavigate();
+
+  const allLeads = newLeadData.length > 0 ? newLeadData : leads;
 
   const formLeadHandler = async (e) => {
     e.preventDefault();
@@ -46,9 +50,11 @@ export function LeadProvider({ children }) {
         },
         body: JSON.stringify(payload),
       });
+
       const data = await res.json();
-      console.log('Data: ',data)
+
       if (
+        res.ok &&
         name !== "" &&
         leadSource !== "" &&
         salesAgentId !== "" &&
@@ -57,10 +63,16 @@ export function LeadProvider({ children }) {
         timeToClose !== 0 &&
         tags !== ""
       ) {
-        alert('Successfully Added the Lead Details')
-        setFormData(true);
-        setNewLeadData((prev) => [...(prev || []), data.data])
-        navigation('/leads')
+        alert("Successfully Added the Lead Details");
+
+        const updatedLeads =
+          newLeadData.length > 0
+            ? [...newLeadData, data.data]
+            : [...leads, data.data];
+
+        setNewLeadData(updatedLeads);
+
+        navigation("/leads");
       }
 
       setName("");
@@ -71,30 +83,88 @@ export function LeadProvider({ children }) {
       setTimeToClose("");
       setTags("");
     } catch (error) {
-      throw error;
+      console.log(error);
     }
   };
 
-  const allLeads = [...(leads || []), ...(newLeadData || [])]
+  const deletedLeadByLeadId = async (leadId) => {
+    try {
+      const res = await fetch(`http://localhost:3001/leads/${leadId}`, {
+        method: "DELETE",
+      });
 
-  const uniqueTags = [
-    ...new Set(leads?.flatMap((lead) => lead.tags))
-  ]
+      if (res.ok) {
+        alert("Successfully Deleted Lead");
 
-  const uniqueSources = [
-    ...new Set(leads?.map((lead) => lead.source)).values()
-  ]
+        const updatedLeads =
+          newLeadData.length > 0
+            ? newLeadData.filter((lead) => lead._id !== leadId)
+            : leads.filter((lead) => lead._id !== leadId);
+
+        setNewLeadData(updatedLeads);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uniqueTags = [...new Set(allLeads?.flatMap((lead) => lead.tags))];
+
+  const uniqueSources = [...new Set(allLeads?.map((lead) => lead.source))];
 
   const uniqueAgents = [
-    ...new Map(leads?.map((l) => [l.salesAgent._id, l.salesAgent])).values(),
+    ...new Map(
+      allLeads
+        ?.filter((lead) => lead.salesAgent)
+        ?.map((lead) => [lead.salesAgent._id, lead.salesAgent]),
+    ).values(),
   ];
 
-  const uniquePriorities = [...new Set(leads?.map((lead) => lead.priority))];
+  const uniquePriorities = [...new Set(allLeads?.map((lead) => lead.priority))];
 
-  const uniqueStatus = [...new Set(leads?.map((lead) => lead.status))];
+  const uniqueStatus = [...new Set(allLeads?.map((lead) => lead.status))];
 
   return (
-    <LeadContext.Provider value={{ leadsStatus, allLeads, setNewLeadData, leads, name, setName, leadSource, setLeadSource, status, setStatus, salesAgentId, setSalesAgentId, priority, setPriority, timeToClose, setTimeToClose, tags, setTags, formLeadHandler, uniqueTags, uniqueStatus, uniqueSources, uniquePriorities, uniqueAgents }}>
+    <LeadContext.Provider
+      value={{
+        leadsStatus,
+
+        leads,
+        allLeads,
+        newLeadData,
+        setNewLeadData,
+
+        name,
+        setName,
+
+        leadSource,
+        setLeadSource,
+
+        salesAgentId,
+        setSalesAgentId,
+
+        status,
+        setStatus,
+
+        priority,
+        setPriority,
+
+        timeToClose,
+        setTimeToClose,
+
+        tags,
+        setTags,
+
+        formLeadHandler,
+        deletedLeadByLeadId,
+
+        uniqueTags,
+        uniqueStatus,
+        uniqueSources,
+        uniquePriorities,
+        uniqueAgents,
+      }}
+    >
       {children}
     </LeadContext.Provider>
   );
