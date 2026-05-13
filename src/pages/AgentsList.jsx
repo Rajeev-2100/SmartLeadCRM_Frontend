@@ -9,36 +9,35 @@ import useFetch from "../useFetch";
 const AgentsList = () => {
   const { agents, allAgents, newAgentData } = useContext(AgentsContext);
   const { allLeads } = useContext(LeadContext);
-  console.log('Agent Name: ',allAgents)
+  // console.log("Agent Name: ", allAgents);
 
-
-  console.log('AllLead: ', allLeads)
+  console.log("AllLead: ", allLeads);
   const [agentName, setAgentName] = useState("none");
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
   const [priorityValue, setPriorityValue] = useState("none");
-  // console.log("Agent Name: ", agentName);
 
-  
+  const allFilteredLead = allLeads?.filter((lead) => {
+    const agentMatch =
+      agentName === "none" ? true : lead.salesAgent?.name === agentName;
 
-  const allFilteredLead = 
-  agentName === 'none' ? allLeads : allAgents.filter(agent => agent.name === agentName)
-    ?.filter((lead) =>
-      priorityValue === "none" ? allLeads : lead.priority === priorityValue,
-    )
-    ?.filter((lead) =>
+    const priorityMatch =
+      priorityValue === "none" ? true : lead.priority === priorityValue;
+
+    const closeTimeMatch =
       selectedCloseTime === "none"
-        ? allLeads
-        : lead.timeToClose == selectedCloseTime,
-    );
-    // console.log('AllFilteredValue: ', allFilteredLead)
+        ? true
+        : lead.timeToClose == selectedCloseTime;
 
-  const isFilteredApplied = agentName !== "none" || priorityValue !== "none" || selectedCloseTime !== "none" ? true : false; 
-  const displayFilteredValue = isFilteredApplied ? allFilteredLead : allLeads;
-  console.log("Display Filtered Value: ", displayFilteredValue.salesAgent);
+    return agentMatch && priorityMatch && closeTimeMatch;
+  });
+
+  const displayFilteredValue = allFilteredLead;
+  console.log("displayFilteredValue: ", displayFilteredValue);
 
   const uniquePriority = [
-    ...new Map(allLeads?.map((l) => [l.priority._id, l.priority])).values(),
+    ...new Map(allLeads?.map((l) => [l.priority, l.priority])).values(),
   ];
+  console.log("uniquePriority: ", uniquePriority);
 
   const uniqueTimes = [
     ...new Map(allLeads?.map((lead) => [lead.timeToClose, lead])).values(),
@@ -87,7 +86,9 @@ const AgentsList = () => {
                     // console.log('Agent: ',agent),
                     return (
                       <>
-                        <option value={agent?.name}>{agent?.name}</option>
+                        <option value={agent?.name} key={agent?._id}>
+                          {agent?.name}
+                        </option>
                       </>
                     );
                   })}
