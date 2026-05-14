@@ -7,15 +7,12 @@ import useFetch from "../useFetch";
 
 const LeadStatusView = () => {
   const [statusValue, setStatusValue] = useState("none");
-  const { leadsStatus, allLeads } = useContext(LeadContext);
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
   const [priorityValue, setPriorityValue] = useState("none");
 
-  // console.log('LeadStatus: ', leadsStatus)
+  const { leadsStatus, allLeads } = useContext(LeadContext);
 
-  const { data: priority } = useFetch(
-    `http://localhost:3001/leads/${statusValue}`,
-  );
+  useFetch(`http://localhost:3001/leads/${statusValue}`);
 
   const allFilteredLead = allLeads
     ?.filter((lead) =>
@@ -25,130 +22,163 @@ const LeadStatusView = () => {
       priorityValue === "none" ? true : lead.priority === priorityValue,
     )
     ?.filter((lead) =>
-      selectedCloseTime === "none" ? true : lead.timeToClose === Number(selectedCloseTime),
+      selectedCloseTime === "none"
+        ? true
+        : String(lead.timeToClose) === String(selectedCloseTime),
     );
 
-  const isFilteredApplied = statusValue !== "none" || priorityValue !== "none" || selectedCloseTime !== "none" ? true : false
+  const isFilteredApplied =
+    statusValue !== "none" ||
+    priorityValue !== "none" ||
+    selectedCloseTime !== "none";
+
   const displayFilteredValue = isFilteredApplied ? allFilteredLead : allLeads;
 
-  const uniquePriority = [
-    ...new Map(allLeads?.map((l) => [l.priority, l.priority])).values(),
-  ];
+  const uniquePriority = [...new Set(allLeads?.map((lead) => lead.priority))];
 
-   const uniqueTimes = [
-    ...new Map(allLeads?.map((lead) => [lead.timeToClose, lead])).values()
-  ]
+  const uniqueTimes = [...new Set(allLeads?.map((lead) => lead.timeToClose))];
 
   return (
     <>
       <LeadStatusHeader />
-      <main>
-        <div className="d-flex">
-          <div
-            className="d-flex flex-column align-items-center py-4"
-            style={{ width: "30%", height: "100%" }}
-          >
-            <h3>SideBar</h3>
-            <hr className="bg-danger" />
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/`}
-            >
-              <h5>Back to Dashboard</h5>
-            </Link>
+      <main
+        className="container-fluid py-3 pb-5"
+        style={{ minHeight: "100vh" }}
+      >
+        <div className="row g-3">
+          <div className="col-12 col-md-3">
+            <div className="bg-light border rounded p-4 h-100">
+              <h3 className="text-center mb-4">SideBar</h3>
+
+              <hr />
+
+              <div className="d-grid">
+                <Link className="btn btn-outline-secondary" to={`/`}>
+                  Back to Dashboard
+                </Link>
+              </div>
+            </div>
           </div>
-          <div
-            className="d-flex flex-column align-items-center bg-danger py-4"
-            style={{ width: "70%", marginBottom: "3.5rem" }}
-          >
-            <h3 className="fs-bold">Lead List by Status</h3>
-            <div
-              className="w-75 mt-3 d-flex flex-column flex-wrap"
-              style={{ height: "100%", width: "85%" }}
-            >
-              <div className="d-flex column-gap-3 flex-wrap overflow-auto ">
-                <label htmlFor="status" className="form-status fs-5">
-                  Filter Status
-                </label>
-                <select
-                  name="status"
-                  id="status"
-                  onChange={(e) => setStatusValue(e.target.value)}
-                  className="form-select"
-                >
-                  <option value="none">Select Status</option>
-                  {leadsStatus?.map((status) => (
-                    <>
-                      <option value={status._id}>{status._id}</option>
-                    </>
-                  ))}
-                </select>
+
+          <div className="col-12 col-md-9">
+            <div className="bg-danger rounded p-3 p-md-4 text-white">
+              <h2 className="fw-bold text-center mb-4">Lead List by Status</h2>
+
+              <div className="bg-light text-dark rounded p-3 mb-4">
+                <div className="row g-3">
+                  <div className="col-12 col-md-4">
+                    <label htmlFor="status" className="form-label fw-bold">
+                      Filter Status
+                    </label>
+
+                    <select
+                      name="status"
+                      id="status"
+                      className="form-select"
+                      onChange={(e) => setStatusValue(e.target.value)}
+                    >
+                      <option value="none">Select Status</option>
+
+                      {leadsStatus?.map((status) => (
+                        <option key={status._id} value={status._id}>
+                          {status._id}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="col-12 col-md-4">
+                    <label htmlFor="priority" className="form-label fw-bold">
+                      Filter Priority
+                    </label>
+
+                    <select
+                      name="priority"
+                      id="priority"
+                      className="form-select"
+                      onChange={(e) => setPriorityValue(e.target.value)}
+                    >
+                      <option value="none">Select Priority</option>
+
+                      {uniquePriority?.map((priority, index) => (
+                        <option key={index} value={priority}>
+                          {priority}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="col-12 col-md-4">
+                    <label htmlFor="timeToClose" className="form-label fw-bold">
+                      Filter Time To Close
+                    </label>
+
+                    <select
+                      name="timeToClose"
+                      id="timeToClose"
+                      className="form-select"
+                      onChange={(e) => setSelectedCloseTime(e.target.value)}
+                    >
+                      <option value="none">Select Time</option>
+
+                      {uniqueTimes?.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
 
-              <hr />
+              <div className="row g-3">
+                {displayFilteredValue?.length > 0 ? (
+                  displayFilteredValue?.map((lead) => (
+                    <div key={lead._id} className="col-12">
+                      <div className="card shadow-sm border-0">
+                        <div className="card-body">
+                          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                            <div className="text-dark">
+                              <h5 className="fw-bold">{lead.name}</h5>
 
-              <div className="d-flex flex-column column-gap-3 flex-wrap overflow-auto ">
-                {displayFilteredValue?.map((lead) => (
-                  <>
-                    <div className="d-flex justify-content-between">
-                      <p className="fs-5">{lead.name} </p>
-                      <p>
-                        <b className="fs-6">{lead.salesAgent?.name || "No Agent Assigned"}</b>
-                      </p>
+                              <p className="mb-1">
+                                <strong>Status:</strong> {lead.status}
+                              </p>
+
+                              <p className="mb-1">
+                                <strong>Priority:</strong> {lead.priority}
+                              </p>
+
+                              <p className="mb-0">
+                                <strong>Agent:</strong>{" "}
+                                {lead.salesAgent?.name || "No Agent Assigned"}
+                              </p>
+                            </div>
+
+                            <div>
+                              <Link
+                                to={`/edited/${lead._id}`}
+                                className="btn btn-primary w-100"
+                              >
+                                Edit
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </>
-                ))}
-              </div>
-
-              <hr />
-
-              <div className="d-flex column-gap-3 flex-wrap overflow-auto ">
-                <label htmlFor="priority" className="form-label fs-5">
-                  Filter Priority:{" "}
-                </label>
-                <select
-                  name="priority"
-                  id="priority"
-                  className="form-select"
-                  onChange={(e) => setPriorityValue(e.target.value)}
-                >
-                  <option value="none">Select the priority</option>
-                  {uniquePriority.map((priority, index) => (
-                    <>
-                      <option key={index} value={priority}>
-                        {priority}
-                      </option>
-                    </>
-                  ))}
-                </select>
-              </div>
-
-              <hr />
-
-              <div className="d-flex column-gap-3 flex-wrap overflow-auto">
-                <label htmlFor="timeToClose" className="form-label fs-5">
-                  Filter Time to Close:{" "}
-                </label>
-                <select
-                  name="timeToClose"
-                  id="timeToClose"
-                  className="form-select"
-                  onChange={(e) => setSelectedCloseTime(e.target.value)}
-                >
-                  <option value="none">Select the time</option>
-                  {uniqueTimes?.map((lead) => (
-                    <>
-                      <option value={lead.timeToClose}>
-                        {lead.timeToClose}
-                      </option>
-                    </>
-                  ))}
-                </select>
+                  ))
+                ) : (
+                  <div className="text-center py-5">
+                    <h4>No Leads Found</h4>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </main>
+
       <Footer />
     </>
   );

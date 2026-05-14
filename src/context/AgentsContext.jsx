@@ -17,8 +17,7 @@ export function AgentsProvider({ children }) {
 
   const fetchedAgents = data?.data || [];
 
-  const displayAgents =
-    agentsState.length > 0 ? agentsState : fetchedAgents;
+  const displayAgents = agentsState.length > 0 ? agentsState : fetchedAgents;
 
   const payLoad = {
     name,
@@ -59,24 +58,17 @@ export function AgentsProvider({ children }) {
 
   const deleteListByAgent = async (agentName) => {
     try {
-      const res = await fetch(
-        `http://localhost:3001/agents/${agentName}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`http://localhost:3001/agents/${agentName}`, {
+        method: "DELETE",
+      });
 
       if (res.ok) {
         alert("Successfully Deleted Agent");
 
         const updatedAgents =
           agentsState.length > 0
-            ? agentsState.filter(
-                (agent) => agent.name !== agentName
-              )
-            : fetchedAgents.filter(
-                (agent) => agent.name !== agentName
-              );
+            ? agentsState.filter((agent) => agent.name !== agentName)
+            : fetchedAgents.filter((agent) => agent.name !== agentName);
 
         setAgentsState(updatedAgents);
       }
@@ -109,9 +101,7 @@ export function useAgents() {
   const context = useContext(AgentsContext);
 
   if (!context) {
-    throw new Error(
-      "useAgents must be used within AgentsProvider"
-    );
+    throw new Error("useAgents must be used within AgentsProvider");
   }
 
   return context;

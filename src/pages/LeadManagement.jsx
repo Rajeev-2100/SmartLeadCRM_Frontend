@@ -1,23 +1,26 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useContext, useState } from "react";
 import LeadContext from "../context/LeadContext";
-import { Link } from "react-router-dom";
 import useFetch from "../useFetch";
 import ManagementHeader from "../components/Header/ManagementHeader";
 import AgentsContext from "../context/AgentsContext";
 
 const LeadManagement = () => {
-  const [formData, setFormData] = useState({});
   const { leads } = useContext(LeadContext);
-  const { agents } = useContext(AgentsContext);
+  const { displayAgents } = useContext(AgentsContext);
 
-  const [selectedAuthorId, setSelectedAuthorId] = useState();
+  const [selectedAuthorId, setSelectedAuthorId] = useState("");
+
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  console.log(comments);
+
+  const navigate = useNavigate();
+
   const { leadId } = useParams();
+
   const leadDetails = leads?.find((lead) => lead._id === leadId);
+
   const { data: leadComment } = useFetch(
     `http://localhost:3001/leads/${leadId}/comments`,
   );
@@ -32,26 +35,25 @@ const LeadManagement = () => {
       });
 
       const data = await res.json();
-      console.log("Data: ", data);
-      if (data) {
-        alert("Details deleted successfully");
-        console.log("Deleted Sucess:", res.message);
+
+      if (res.ok) {
+        alert("Lead deleted successfully");
+
+        navigate("/leads");
       } else {
-        console.error("Error: ", res.message);
+        console.error(data.message);
       }
     } catch (error) {
-      throw error;
+      console.log(error.message);
     }
   };
 
-
-  const displayComments =
-    comments.length > 0 ? comments : leadComment?.data || [];
+  const displayComments = comments.length > 0 ? [...(leadComment?.data || []), ...comments] : leadComment?.data || [];
 
   const formCommentSubmit = async (e) => {
     e.preventDefault();
 
-    if (!comment.trim()  === "") {
+    if (comment.trim() === "") {
       alert("Comment cannot be empty");
       return;
     }
@@ -79,11 +81,11 @@ const LeadManagement = () => {
       );
 
       const data = await res.json();
-      // console.log(data);
 
       if (res.ok) {
-        alert("New Comment Added successfully");
-        const selectedAgent = agents.find(
+        alert("New Comment Added Successfully");
+
+        const selectedAgent = displayAgents.find(
           (agent) => agent._id === selectedAuthorId,
         );
 
@@ -93,6 +95,7 @@ const LeadManagement = () => {
         };
 
         setComments((prev) => [...prev, newComment]);
+
         setComment("");
         setSelectedAuthorId("");
       }
@@ -102,143 +105,180 @@ const LeadManagement = () => {
   };
 
   const uniqueAgents = [
-    ...new Map(agents?.map((agent) => [agent.name, agent])).values(),
+    ...new Map(displayAgents?.map((agent) => [agent.name, agent])).values(),
   ];
 
   return (
     <>
       <ManagementHeader />
-      <main className="py-0" style={{ height: "100vh" }}>
-        <div className="d-flex">
-          <div
-            className="d-flex flex-column align-items-center py-4"
-            style={{ width: "30%", height: "100%" }}
-          >
-            <h3>SideBar</h3>
-            <hr className="bg-danger" />
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/`}
-            >
-              <h5>Back to Dashboard</h5>
-            </Link>
+
+      <main
+        className="container-fluid py-3 pb-5"
+        style={{ minHeight: "100vh" }}
+      >
+        <div className="row g-3">
+          {/* Sidebar */}
+          <div className="col-12 col-md-3">
+            <div className="bg-light border rounded p-4 h-100">
+              <h3 className="text-center fw-bold mb-4">Sidebar</h3>
+
+              <hr />
+
+              <div className="d-grid">
+                <Link className="btn btn-outline-secondary" to={`/`}>
+                  Back to Dashboard
+                </Link>
+              </div>
+            </div>
           </div>
-          <div
-            className="d-flex flex-column align-items-center bg-danger py-4"
-            style={{ width: "70%" }}
-          >
-            <h3 className="fs-bolder">Lead Details</h3>
-            <div
-              className="w-75 mt-3 d-flex flex-column py-5"
-              style={{ height: "100%" }}
-            >
-              <div>
-                <p className="fs-5">
-                  <strong>Lead Name: </strong>
-                  {leadDetails?.name}
-                </p>
-                <p className="fs-5">
-                  <strong>Sales Agent: </strong>
-                  {leadDetails?.salesAgent?.name || "No Agent Assigned"}
-                </p>
-                <p className="fs-5">
-                  <strong>Lead Source: </strong>
-                  {leadDetails?.source}
-                </p>
-                <p className="fs-5">
-                  <strong>Lead Status: </strong>
-                  {leadDetails?.status}
-                </p>
-                <p className="fs-5">
-                  <strong>Priority: </strong>
-                  {leadDetails?.priority}
-                </p>
-                <p className="fs-5">
-                  <strong>Time to Close: </strong>
-                  {leadDetails?.timeToClose}
-                </p>
-              </div>
-              <hr />
-              <div className="d-flex flex-row justify-content-center gap-4">
-                <Link
-                  to={`/edited/${leadDetails?._id}`}
-                  className="btn btn-primary"
-                >
-                  <h6 className="fs-bold d-inline">Edit Lead</h6>
-                </Link>
-                <Link
-                  to={`/leads`}
-                  onClick={() => deletedLead(leadDetails?._id)}
-                  className="btn btn-primary"
-                >
-                  <h6 className="fs-bold d-inline">Delete Lead</h6>
-                </Link>
-              </div>
-              <hr />
-              <div>
-                <h5 className="text-center">Comment Section</h5>
-                <div width="100%">
-                  {displayComments?.map((comment) => {
-                    const date = new Date(comment.createdAt);
-                    return (
-                      <div
-                        className="d-flex justify-content-between"
-                        key={comment._id}
-                      >
-                        <div className="d-flex flex-column">
-                          <p className="d-inline m-0">
-                            <b>Name: </b>
-                            {comment.author.name}
-                          </p>
-                          <p className="d-inline mb-3">
-                            <b>Comment: </b>
-                            {comment.commentText}
-                          </p>
-                        </div>
-                        <div className="">{date.toLocaleString()}</div>
-                      </div>
-                    );
-                  })}
+
+          <div className="col-12 col-md-9">
+            <div className="bg-danger text-white rounded p-3 p-md-4">
+              <h2 className="text-center fw-bold mb-4">Lead Details</h2>
+
+              <div className="bg-light text-dark rounded p-4 shadow-sm">
+                <div className="row g-3">
+                  <div className="col-12 col-md-6">
+                    <p className="fs-5">
+                      <strong>Lead Name:</strong> {leadDetails?.name}
+                    </p>
+
+                    <p className="fs-5">
+                      <strong>Sales Agent:</strong>{" "}
+                      {leadDetails?.salesAgent?.name || "No Agent Assigned"}
+                    </p>
+
+                    <p className="fs-5">
+                      <strong>Lead Source:</strong> {leadDetails?.source}
+                    </p>
+
+                    <p className="fs-5">
+                      <strong>Tags :</strong> {leadDetails?.tags.join(', ')}
+                    </p>
+                  </div>
+
+                  <div className="col-12 col-md-6">
+                    <p className="fs-5">
+                      <strong>Lead Status:</strong> {leadDetails?.status}
+                    </p>
+
+                    <p className="fs-5">
+                      <strong>Priority:</strong> {leadDetails?.priority}
+                    </p>
+
+                    <p className="fs-5">
+                      <strong>Time To Close:</strong> {leadDetails?.timeToClose}
+                    </p>
+                  </div>
                 </div>
+
                 <hr />
-                <div>
-                  <form
-                    className="d-flex flex-column"
-                    onSubmit={formCommentSubmit}
+
+                <div className="d-flex flex-column flex-md-row justify-content-center gap-3">
+                  <Link
+                    to={`/edited/${leadDetails?._id}`}
+                    className="btn btn-primary"
                   >
-                    <label htmlFor="author">
-                      <h6>Author:</h6>{" "}
+                    Edit Lead
+                  </Link>
+
+                  <button
+                    onClick={() => deletedLead(leadDetails?._id)}
+                    className="btn btn-dark"
+                  >
+                    Delete Lead
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-light text-dark rounded p-4 mt-4 shadow-sm">
+                <h4 className="text-center mb-4">Comment Section</h4>
+
+                <div className="d-flex flex-column gap-3">
+                  {displayComments?.length > 0 ? (
+                    displayComments?.map((comment) => {
+                      const date = new Date(comment.createdAt);
+
+                      return (
+                        <div
+                          key={comment._id}
+                          className="border rounded p-3 bg-white"
+                        >
+                          <div className="d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <div>
+                              <p className="mb-1">
+                                <strong>Name:</strong> {comment.author?.name}
+                              </p>
+
+                              <p className="mb-0">
+                                <strong>Comment:</strong> {comment.commentText}
+                              </p>
+                            </div>
+
+                            <small className="text-muted">
+                              {date.toLocaleString()}
+                            </small>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <h5 className="text-center">No Comments Yet</h5>
+                  )}
+                </div>
+
+                <hr className="my-4" />
+
+                <form
+                  className="d-flex flex-column gap-3"
+                  onSubmit={formCommentSubmit}
+                >
+                  <div>
+                    <label htmlFor="author" className="form-label fw-bold">
+                      Author
                     </label>
+
                     <select
                       name="author"
-                      value={selectedAuthorId}
+                      id="author"
+                      className="form-select"
+                      value={selectedAuthorId || ""}
                       onChange={(e) => setSelectedAuthorId(e.target.value)}
                     >
                       <option value="">Select Author</option>
-                      {uniqueAgents.map((agent) => (
+
+                      {uniqueAgents?.map((agent) => (
                         <option key={agent._id} value={agent._id}>
                           {agent.name}
                         </option>
                       ))}
                     </select>
-                    <br />
-                    <label htmlFor="comment">
-                      <h6>Comment:</h6>{" "}
+                  </div>
+
+                  <div>
+                    <label htmlFor="comment" className="form-label fw-bold">
+                      Comment
                     </label>
-                    <input
-                      type="text"
+
+                    <textarea
+                      id="comment"
+                      rows="4"
+                      className="form-control"
+                      value={comment || ""}
                       onChange={(e) => setComment(e.target.value)}
-                    />
-                    <button className="my-4 btn btn-primary " type="submit">
-                      Submit
-                    </button>
-                  </form>
-                </div>
+                    ></textarea>
+                  </div>
+
+                  <button className="btn btn-primary" type="submit">
+                    Submit Comment
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </main>
+
       <Footer />
     </>
   );

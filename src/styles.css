@@ -1,0 +1,9 @@
+.sidebar-box {
+  min-height: 85vh;
+}
+
+@media (max-width: 720px) {
+  .sidebar-box {
+    min-height: auto;
+  }
+}

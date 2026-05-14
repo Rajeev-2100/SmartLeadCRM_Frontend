@@ -46,127 +46,156 @@ const AgentsList = () => {
   return (
     <>
       <SalesAgentHeaderView />
-      <main className="py-0">
-        <div className="d-flex">
-          <div
-            className="d-flex flex-column align-items-center py-4"
-            style={{ width: "30%", height: "100%" }}
-          >
-            <h3>SideBar</h3>
-            <hr className="bg-danger" />
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/`}
+      <main
+        className="container-fluid py-4"
+        style={{
+          backgroundColor: "#f4f7fb",
+          minHeight: "100vh",
+        }}
+      >
+        <div className="row g-4">
+          <div className="col-12 col-md-3">
+            <div
+              className="bg-white shadow-sm rounded-4 p-4 h-100"
+              style={{
+                minHeight: "85vh",
+              }}
             >
-              <h5>Back to Dashboard</h5>
-            </Link>
+              <h4 className="fw-bold text-center mb-4">Sidebar</h4>
+
+              <hr />
+
+              <div className="d-grid gap-3">
+                <Link className="btn btn-outline-secondary rounded-3" to="/">
+                  Back to Dashboard
+                </Link>
+
+                <Link className="btn btn-primary rounded-3" to="/addNewAgents">
+                  Add New Agent
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <div
-            className="d-flex flex-column align-items-center bg-danger py-5"
-            style={{ width: "70%", marginBottom: "3.5rem", left: 0 }}
-          >
-            <h3 className="fs-bold">Lead List by Agent</h3>
-            <div
-              className="w-75 mt-2 d-flex flex-column flex-wrap py-4"
-              style={{ height: "100%", width: "85%" }}
-            >
-              <div className="d-flex column-gap-3 flex-wrap overflow-auto">
-                <label htmlFor="status" className="form-status fs-5">
-                  Filter Agent
-                </label>
-                <select
-                  name="agent"
-                  id="agent"
-                  onChange={(e) => setAgentName(e.target.value)}
-                  className="form-select"
-                >
-                  <option value="none">Select the Agent Name</option>
-                  {allAgents?.map((agent) => {
-                    // console.log('Agent: ',agent),
-                    return (
-                      <>
-                        <option value={agent?.name} key={agent?._id}>
-                          {agent?.name}
-                        </option>
-                      </>
-                    );
-                  })}
-                </select>
+          <div className="col-12 col-md-9">
+            <div className="bg-white shadow rounded-4 p-4 p-md-5">
+              <div className="text-center mb-5">
+                <h2 className="fw-bold">Lead List By Agent</h2>
+
+                <p className="text-secondary mb-0">
+                  Filter leads by agent, priority, and closing time.
+                </p>
               </div>
 
-              <hr />
+              <div className="row g-4 mb-5">
+                <div className="col-12 col-md-4">
+                  <label htmlFor="agent" className="form-label fw-semibold">
+                    Filter Agent
+                  </label>
 
-              <div className="d-flex flex-column column-gap-3 flex-wrap overflow-auto ">
-                {displayFilteredValue?.map((lead) => (
-                  // console.log("SalesAgent: ", lead),
-                  <>
-                    <div className="d-flex justify-content-between">
-                      <p className="fs-5">{lead.name} </p>
-                      <p>
-                        <b className="fs-6">
-                          {lead.salesAgent?.name || "No Assigned"}
-                        </b>
-                      </p>
-                    </div>
-                  </>
-                ))}
-              </div>
+                  <select
+                    name="agent"
+                    id="agent"
+                    className="form-select form-select-lg"
+                    onChange={(e) => setAgentName(e.target.value)}
+                  >
+                    <option value="none">Select Agent Name</option>
 
-              <hr />
+                    {allAgents?.map((agent) => (
+                      <option value={agent?.name} key={agent?._id}>
+                        {agent?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="d-flex column-gap-3 flex-wrap overflow-auto ">
-                <label htmlFor="priority" className="form-label fs-5">
-                  Filter Priority:{" "}
-                </label>
-                <select
-                  name="priority"
-                  id="priority"
-                  className="form-select"
-                  onChange={(e) => setPriorityValue(e.target.value)}
-                >
-                  <option value="none">Select the priority</option>
-                  {uniquePriority.map((priority, index) => (
-                    <>
+                <div className="col-12 col-md-4">
+                  <label htmlFor="priority" className="form-label fw-semibold">
+                    Filter Priority
+                  </label>
+
+                  <select
+                    name="priority"
+                    id="priority"
+                    className="form-select form-select-lg"
+                    onChange={(e) => setPriorityValue(e.target.value)}
+                  >
+                    <option value="none">Select Priority</option>
+
+                    {uniquePriority.map((priority, index) => (
                       <option key={index} value={priority}>
                         {priority}
                       </option>
-                    </>
-                  ))}
-                </select>
-              </div>
+                    ))}
+                  </select>
+                </div>
 
-              <hr />
+                <div className="col-12 col-md-4">
+                  <label
+                    htmlFor="timeToClose"
+                    className="form-label fw-semibold"
+                  >
+                    Filter Time To Close
+                  </label>
 
-              <div className="d-flex column-gap-3 flex-wrap overflow-auto">
-                <label htmlFor="timeToClose" className="form-label fs-5">
-                  Filter Time to Close:{" "}
-                </label>
-                <select
-                  name="timeToClose"
-                  id="timeToClose"
-                  className="form-select"
-                  onChange={(e) => setSelectedCloseTime(e.target.value)}
-                >
-                  <option value="none">Select the time</option>
-                  {uniqueTimes?.map((lead) => (
-                    <>
-                      <option value={lead.timeToClose}>
-                        {lead.timeToClose}
+                  <select
+                    name="timeToClose"
+                    id="timeToClose"
+                    className="form-select form-select-lg"
+                    onChange={(e) => setSelectedCloseTime(e.target.value)}
+                  >
+                    <option value="none">Select Time</option>
+
+                    {uniqueTimes?.map((lead, index) => (
+                      <option key={index} value={lead.timeToClose}>
+                        {lead.timeToClose} Days
                       </option>
-                    </>
-                  ))}
-                </select>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <hr />
 
-              <div className="text-center">
-                <Link
-                  className="btn btn-primary py-2 px-5"
-                  to={`/addNewAgents`}
-                >
-                  Add New Agent
-                </Link>
+              <div className="row g-4">
+                {displayFilteredValue?.length > 0 ? (
+                  displayFilteredValue?.map((lead) => (
+                    <div className="col-12" key={lead._id}>
+                      <div className="border rounded-4 p-4 shadow-sm">
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                          <div>
+                            <h5 className="fw-bold mb-1">{lead.name}</h5>
+
+                            <p className="text-secondary mb-0">
+                              Assigned Agent:{" "}
+                              <span className="fw-semibold">
+                                {lead.salesAgent?.name || "No Assigned"}
+                              </span>
+                            </p>
+                          </div>
+
+                          <div className="d-flex gap-2 flex-wrap">
+                            <span className="badge bg-primary px-3 py-2">
+                              {lead.priority}
+                            </span>
+
+                            <span className="badge bg-success px-3 py-2">
+                              {lead.status}
+                            </span>
+
+                            <span className="badge bg-dark px-3 py-2">
+                              {lead.timeToClose} Days
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-12">
+                    <div className="text-center py-5">
+                      <h5 className="text-secondary">No Leads Found</h5>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

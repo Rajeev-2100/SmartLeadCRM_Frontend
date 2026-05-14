@@ -6,7 +6,8 @@ import LeadContext from "../context/LeadContext";
 import AgentsContext from "../context/AgentsContext";
 
 const Setting = () => {
-  const { allAgents, displayAgents, deleteListByAgent } = useContext(AgentsContext);
+  const { allAgents, displayAgents, deleteListByAgent } =
+    useContext(AgentsContext);
 
   const { allLeads, deletedLeadByLeadId } = useContext(LeadContext);
 
@@ -14,87 +15,95 @@ const Setting = () => {
     <>
       <SettingHeader />
       <main
+        className="container-fluid py-4"
         style={{
           minHeight: "100vh",
           backgroundColor: "#f5f7fb",
         }}
       >
-        <div className="d-flex">
-          <div
-            className="bg-white shadow-sm d-flex flex-column align-items-center py-5"
-            style={{
-              width: "20%",
-              minHeight: "100vh",
-            }}
-          >
-            <h3 className="fw-bold">Sidebar</h3>
+        <div className="row g-4">
+          <div className="col-12 col-md-3 col-lg-2">
+            <div className="bg-white shadow-sm rounded-4 p-4 sidebar-box">
+              <h4 className="fw-bold text-center mb-4 d-none d-sm-block d-md-inline">
+                Sidebar
+              </h4>
 
-            <hr className="w-75" />
+              <hr className="d-none d-md-block" />
 
-            <Link className="text-decoration-none text-secondary" to={`/`}>
-              <h5>Back to Dashboard</h5>
-            </Link>
+              <div className="d-grid">
+                <Link className="btn btn-outline-secondary rounded-3" to="/">
+                  Back to Dashboard
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <div
-            className="py-5 px-4"
-            style={{
-              width: "80%",
-            }}
-          >
-            <div className="mb-5 text-center">
-              <h4 className="fw-bold">Settings Dashboard</h4>
+          <div className="col-12 col-md-9 col-lg-10">
+            <div className="text-center mb-5">
+              <h2 className="fw-bold">Settings Dashboard</h2>
 
-              <p className="text-secondary">
+              <p className="text-secondary mb-0">
                 Manage sales agents and lead records.
               </p>
             </div>
 
             <div className="row g-4">
-              <div className="col-lg-6">
-                <div className="bg-white rounded-4 shadow p-4 h-100">
+              <div className="col-12 col-xl-6">
+                <div className="bg-white shadow rounded-4 p-4 h-100">
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <h3 className="fw-bold m-0">Sales Agents</h3>
-                    <span className="badge bg-primary fs-6">
+
+                    <span className="badge bg-primary fs-6 px-3 py-2">
                       {allAgents?.length}
                     </span>
                   </div>
+
                   <div
                     className="overflow-auto pe-2"
                     style={{
-                      maxHeight: "500px",
+                      maxHeight: "600px",
                     }}
                   >
-                    {displayAgents?.map((agent) => (
-                      <div
-                        key={agent._id}
-                        className="d-flex justify-content-between align-items-center border rounded-3 p-3 mb-3 bg-light"
-                      >
-                        <div>
-                          <h6 className="m-0 fw-semibold">{agent.name}</h6>
-                          <small className="text-secondary">
-                            Assigned Agent
-                          </small>
-                        </div>
-                        <button
-                          className="btn btn-outline-danger btn-sm"
-                          value={agent.name}
-                          onClick={() => deleteListByAgent(agent.name)}
+                    {displayAgents?.length > 0 ? (
+                      displayAgents?.map((agent) => (
+                        <div
+                          key={agent._id}
+                          className="border rounded-4 p-3 mb-3 bg-light"
                         >
-                          Delete
-                        </button>
+                          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <div>
+                              <h5 className="fw-semibold mb-1">{agent.name}</h5>
+
+                              <p className="text-secondary mb-0">
+                                Assigned Sales Agent
+                              </p>
+                            </div>
+
+                            <button
+                              className="btn btn-outline-danger rounded-3"
+                              value={agent.name}
+                              onClick={() => deleteListByAgent(agent.name)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-5">
+                        <h6 className="text-secondary">No Agents Available</h6>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="col-lg-6">
-                <div className="bg-white rounded-4 shadow p-4 h-100">
+              <div className="col-12 col-xl-6">
+                <div className="bg-white shadow rounded-4 p-4 h-100">
                   <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h3 className="fw-bold m-0">Lead Names</h3>
+                    <h3 className="fw-bold m-0">Lead Records</h3>
 
-                    <span className="badge bg-success fs-6">
+                    <span className="badge bg-success fs-6 px-3 py-2">
                       {allLeads?.length}
                     </span>
                   </div>
@@ -102,29 +111,39 @@ const Setting = () => {
                   <div
                     className="overflow-auto pe-2"
                     style={{
-                      maxHeight: "500px",
+                      maxHeight: "600px",
                     }}
                   >
-                    {allLeads?.map((lead) => (
-                      <div
-                        key={lead._id}
-                        className="d-flex justify-content-between align-items-center border rounded-3 p-3 mb-3 bg-light"
-                      >
-                        <div>
-                          <h6 className="m-0 fw-semibold">{lead.name}</h6>
-
-                          <small className="text-secondary">Lead Record</small>
-                        </div>
-
-                        <button
-                          className="btn btn-outline-danger btn-sm"
-                          value={lead._id}
-                          onClick={(e) => deletedLeadByLeadId(e.target.value)}
+                    {allLeads?.length > 0 ? (
+                      allLeads?.map((lead) => (
+                        <div
+                          key={lead._id}
+                          className="border rounded-4 p-3 mb-3 bg-light"
                         >
-                          Delete
-                        </button>
+                          <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <div>
+                              <h5 className="fw-semibold mb-1">{lead.name}</h5>
+
+                              <p className="text-secondary mb-0">Lead Record</p>
+                            </div>
+
+                            <button
+                              className="btn btn-outline-danger rounded-3"
+                              value={lead._id}
+                              onClick={(e) =>
+                                deletedLeadByLeadId(e.target.value)
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-5">
+                        <h6 className="text-secondary">No Leads Available</h6>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
@@ -132,6 +151,7 @@ const Setting = () => {
           </div>
         </div>
       </main>
+
       <Footer />
     </>
   );

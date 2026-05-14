@@ -42,6 +42,66 @@ const EditedManagement = () => {
     }
   }, [leadDetails]);
 
+  const EditFormHandler = async (e) => {
+    e.preventDefault();
+
+    const { name, source, salesAgent, status, priority, timeToClose, tags } =
+      formData;
+
+    if (
+      !name ||
+      !source ||
+      !salesAgent ||
+      !status ||
+      !priority ||
+      !timeToClose ||
+      !tags
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    const payload = {
+      name,
+      source,
+      salesAgent,
+      status,
+      priority,
+      timeToClose: Number(timeToClose),
+      tags: [tags],
+    };
+
+    try {
+      const res = await fetch(`http://localhost:3001/leads/${leadId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Lead Updated Successfully");
+
+        const updatedLeadList = allLeads.map((lead) =>
+          lead._id === leadId ? data.data : lead,
+        );
+
+        setNewLeadData(updatedLeadList);
+
+        navigation("/leads");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+
+      alert("Something went wrong");
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -121,159 +181,187 @@ const EditedManagement = () => {
     <>
       <EditedManagementHeader />
 
-      <main>
-        <div className="d-flex">
-          <div
-            className="d-flex flex-column align-items-center py-4 bg-light"
-            style={{
-              width: "25%",
-              minHeight: "100vh",
-            }}
-          >
-            <h3 className="fw-bold">Sidebar</h3>
+      <main
+        className="container-fluid py-4"
+        style={{
+          backgroundColor: "#f4f7fb",
+          minHeight: "100vh",
+        }}
+      >
+        <div className="row g-4">
+          <div className="col-12 col-md-3">
+            <div
+              className="bg-white shadow-sm rounded-4 p-4 h-100"
+              style={{
+                minHeight: "85vh",
+              }}
+            >
+              <h4 className="fw-bold text-center mb-4">Sidebar</h4>
 
-            <hr className="w-75" />
+              <hr />
 
-            <Link className="text-decoration-none text-secondary" to={`/`}>
-              <h5>Back to Dashboard</h5>
-            </Link>
+              <div className="d-grid gap-3">
+                <Link className="btn btn-outline-secondary rounded-3" to="/">
+                  Back to Dashboard
+                </Link>
+
+                <Link className="btn btn-outline-primary rounded-3" to="/leads">
+                  Back to Leads
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <div
-            className="p-5"
-            style={{
-              width: "75%",
-              backgroundColor: "#f5f7fb",
-              minHeight: "100vh",
-            }}
-          >
-            <div className="bg-white shadow rounded-4 p-4">
-              <h3 className="text-center fw-bold mb-4">Edit Lead Management</h3>
+          <div className="col-12 col-md-9">
+            <div className="bg-white shadow rounded-4 p-4 p-md-5">
+              <div className="mb-4 text-center">
+                <h2 className="fw-bold">Edit Lead Management</h2>
+
+                <p className="text-secondary mb-0">
+                  Update lead information and manage sales details.
+                </p>
+              </div>
 
               <form onSubmit={formLeadHandler}>
-                <div className="mb-3">
-                  <label className="form-label">Lead Name</label>
+                <div className="row g-4">
+                  {/* Lead Name */}
+                  <div className="col-12">
+                    <label className="form-label fw-semibold">Lead Name</label>
 
-                  <input
-                    type="text"
-                    name="name"
-                    className="form-control"
-                    value={formData.name}
-                    onChange={handleChange}
-                  />
-                </div>
+                    <input
+                      type="text"
+                      name="name"
+                      className="form-control form-control-lg"
+                      placeholder="Enter lead name"
+                      value={formData?.name || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Lead Source</label>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-semibold">
+                      Lead Source
+                    </label>
 
-                  <select
-                    name="source"
-                    className="form-select"
-                    value={formData.source}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Source</option>
+                    <select
+                      name="source"
+                      className="form-select form-select-lg"
+                      value={formData?.source || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Source</option>
 
-                    {uniqueSources?.map((src, index) => (
-                      <option key={index} value={src}>
-                        {src}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                      {uniqueSources?.map((src, index) => (
+                        <option key={index} value={src}>
+                          {src}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Sales Agent</label>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-semibold">
+                      Sales Agent
+                    </label>
 
-                  <select
-                    name="salesAgent"
-                    className="form-select"
-                    value={formData.salesAgent}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Agent</option>
+                    <select
+                      name="salesAgent"
+                      className="form-select form-select-lg"
+                      value={formData?.salesAgent || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Agent</option>
 
-                    {uniqueAgents?.map((agent) => (
-                      <option key={agent._id} value={agent._id}>
-                        {agent.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                      {uniqueAgents?.map((agent) => (
+                        <option key={agent._id} value={agent._id}>
+                          {agent.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Lead Status</label>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-semibold">
+                      Lead Status
+                    </label>
 
-                  <select
-                    name="status"
-                    className="form-select"
-                    value={formData.status}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Status</option>
+                    <select
+                      name="status"
+                      className="form-select form-select-lg"
+                      value={formData?.status || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Status</option>
 
-                    {uniqueStatus?.map((status, index) => (
-                      <option key={index} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                      {uniqueStatus?.map((status, index) => (
+                        <option key={index} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Priority</label>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-semibold">Priority</label>
 
-                  <select
-                    name="priority"
-                    className="form-select"
-                    value={formData.priority}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Priority</option>
+                    <select
+                      name="priority"
+                      className="form-select form-select-lg"
+                      value={formData?.priority || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Priority</option>
 
-                    {uniquePriorities?.map((priority, index) => (
-                      <option key={index} value={priority}>
-                        {priority}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                      {uniquePriorities?.map((priority, index) => (
+                        <option key={index} value={priority}>
+                          {priority}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Time To Close</label>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-semibold">
+                      Time To Close
+                    </label>
 
-                  <input
-                    type="number"
-                    name="timeToClose"
-                    className="form-control"
-                    value={formData.timeToClose}
-                    onChange={handleChange}
-                  />
-                </div>
+                    <input
+                      type="number"
+                      name="timeToClose"
+                      className="form-control form-control-lg"
+                      placeholder="Days"
+                      value={formData?.timeToClose || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="mb-4">
-                  <label className="form-label">Tags</label>
+                  <div className="col-12 col-md-6">
+                    <label className="form-label fw-semibold">Tags</label>
 
-                  <select
-                    name="tags"
-                    className="form-select"
-                    value={formData.tags}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Tag</option>
+                    <select
+                      name="tags"
+                      className="form-select form-select-lg"
+                      value={formData?.tags || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">Select Tag</option>
 
-                    {uniqueTags?.map((tag, index) => (
-                      <option key={index} value={tag}>
-                        {tag}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                      {uniqueTags?.map((tag, index) => (
+                        <option key={index} value={tag}>
+                          {tag}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="d-grid">
-                  <button className="btn btn-primary" type="submit">
-                    Update Lead
-                  </button>
+                  <div className="col-12 pt-2">
+                    <button
+                      className="btn btn-primary btn-lg w-100 rounded-3"
+                      type="submit"
+                    >
+                      Update Lead
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>

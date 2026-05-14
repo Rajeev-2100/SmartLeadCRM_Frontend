@@ -5,119 +5,125 @@ import Footer from "./components/Footer";
 import { useContext, useState } from "react";
 import LeadContext from "./context/LeadContext.jsx";
 import MainHeader from "./components/Header/MainHeader.jsx";
+import '../src/styles.css'
 
 function App() {
   const { allLeads, leadsStatus, newLeadData } = useContext(LeadContext);
+
   const [selectedStatus, setSelectedStatus] = useState("none");
-  
+
   const filteredStatus =
     selectedStatus === "none" || selectedStatus === ""
-      ? allLeads 
-      : allLeads?.filter((lead) => lead.status === selectedStatus) || newLeadData?.filter((lead) => lead.status === selectedStatus)
+      ? allLeads
+      : allLeads?.filter((lead) => lead.status === selectedStatus) ||
+        newLeadData?.filter((lead) => lead.status === selectedStatus);
 
   return (
     <>
       <MainHeader />
-      <main className="py-0" style={{ height: "100vh" }}>
-        <div className="d-flex">
-          <div
-            className="d-flex flex-column align-items-center py-4"
-            style={{ width: "30%", height: "100%" }}
-          >
-            <h3>SideBar</h3>
-            <hr className="bg-danger" />
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/leads`}
-            >
-              <h5>Leads</h5>
-            </Link>
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/salesView`}
-            >
-              <h5>Sales</h5>
-            </Link>
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/agents`}
-            >
-              <h5>Agents</h5>
-            </Link>
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/reports`}
-            >
-              <h5>Reports</h5>
-            </Link>
-            <Link
-              className="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-              to={`/settings`}
-            >
-              <h5>Settings</h5>
-            </Link>
+
+      <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
+        <div className="row g-3">
+          <div className="col-12 col-md-3">
+            <div className="border rounded p-4 bg-light h-100">
+              <h3 className="text-center mb-4">SideBar</h3>
+
+              <div className="d-flex flex-column gap-3 text-center">
+                <Link className="btn btn-outline-secondary" to={`/leads`}>
+                  Leads
+                </Link>
+
+                <Link className="btn btn-outline-secondary" to={`/salesView`}>
+                  Sales
+                </Link>
+
+                <Link className="btn btn-outline-secondary" to={`/agents`}>
+                  Agents
+                </Link>
+
+                <Link className="btn btn-outline-secondary" to={`/reports`}>
+                  Reports
+                </Link>
+
+                <Link className="btn btn-outline-secondary" to={`/settings`}>
+                  Settings
+                </Link>
+              </div>
+            </div>
           </div>
-          <div
-            className="d-flex flex-column align-items-center bg-danger py-4"
-            style={{ width: "70%", marginBottom: "3.5rem" }}
-          >
-            <h3 className="fs-bold">Main Content</h3>
-            <div
-              className="w-75 mt-3 d-flex flex-column flex-wrap"
-              style={{ height: "100%", width: '85%' }}
-            >
-              <div
-                className="d-flex column-gap-3 flex-wrap overflow-auto "
-                style={{ flex: 1, minHeight: 0 }}
-              >
+
+          <div className="col-12 col-md-9">
+            <div className="bg-danger rounded p-3 p-md-4 text-white">
+              <h3 className="text-center mb-4">Main Content</h3>
+
+              <div className="row g-3">
                 {filteredStatus?.map((lead) => (
-                  <div key={lead._id} className="border p-2 m-1 bg-light" style={{ width: '30%', height: '10rem'}}>
-                    <p className="m-0">
-                      <strong>{lead.name}</strong>
-                    </p>
-                    <p className="m-0">
-                      <b>Status:</b> {lead.status}
-                    </p>
-                    <p className="mb-2">
-                      <b>Priority: </b>
-                      {lead.priority}
-                    </p>
-                    <br />
+                  <div key={lead._id} className="col-12 col-sm-6 col-lg-4">
+                    <div className="card h-100 shadow-sm">
+                      <div className="card-body text-dark">
+                        <h5 className="card-title">{lead.name}</h5>
+
+                        <p className="card-text mb-1">
+                          <strong>Status:</strong> {lead.status}
+                        </p>
+
+                        <p className="card-text">
+                          <strong>Priority:</strong> {lead.priority}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-              <hr />
-              <div className="d-flex flex-column">
-                <h5>Lead Status: </h5>
-                {leadsStatus?.map((item) => (
-                  <p key={item._id} className="m-0">
-                    {item._id}: {item.count} Leads
-                  </p>
-                ))}
+
+              <hr className="border-light my-4" />
+
+              <div className="bg-light text-dark rounded p-3">
+                <h5>Lead Status</h5>
+
+                <div className="d-flex flex-wrap gap-3 mt-3">
+                  {leadsStatus?.map((item) => (
+                    <div
+                      key={item._id}
+                      className="border rounded px-3 py-2 bg-white"
+                    >
+                      <strong>{item._id}</strong>: {item.count} Leads
+                    </div>
+                  ))}
+                </div>
               </div>
-              <hr />
-              <div className="d-flex flex-column">
-                <label htmlFor="statusValue">
-                  <h5>Quick Filters: </h5>
+
+              <hr className="border-light my-4" />
+
+              <div className="bg-light text-dark rounded p-3">
+                <label htmlFor="statusFilter" className="form-label fw-bold">
+                  Quick Filters
                 </label>
+
                 <select
-                  id=""
+                  id="statusFilter"
+                  className="form-select"
                   onChange={(e) => setSelectedStatus(e.target.value)}
                 >
-                  <option value="none" id="statusValue">
-                    Filter By Status
-                  </option>
+                  <option value="none">Filter By Status</option>
+
                   {leadsStatus?.map((status) => (
-                    <>
-                      <option key={status._id} value={status._id}>
-                        {status._id}
-                      </option>
-                    </>
+                    <option key={status._id} value={status._id}>
+                      {status._id}
+                    </option>
                   ))}
                 </select>
               </div>
-              <div className="mt-3">
-                <Link to={`/addleadform`} className="btn btn-primary w-100">Add New Lead</Link>
+
+              <div
+                className="my-3 w-100"
+                style={{
+                  minWidth: "unset",
+                }}
+              >
+                <Link to={`/addleadform`} className="btn btn-primary w-100">
+                  Add New Lead
+                </Link>
               </div>
             </div>
           </div>

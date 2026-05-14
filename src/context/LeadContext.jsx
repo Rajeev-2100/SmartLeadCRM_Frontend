@@ -67,8 +67,8 @@ export function LeadProvider({ children }) {
 
         const updatedLeads =
           newLeadData.length > 0
-            ? [...newLeadData, data.data]
-            : [...leads, data.data];
+            ? [...newLeadData, data?.data]
+            : [...leads, data?.data];
 
         setNewLeadData(updatedLeads);
 
