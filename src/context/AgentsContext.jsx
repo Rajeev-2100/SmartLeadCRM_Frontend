@@ -13,7 +13,7 @@ export function AgentsProvider({ children }) {
 
   const [agentsState, setAgentsState] = useState([]);
 
-  const { data } = useFetch("http://localhost:3001/agents");
+  const { data } = useFetch("https://crm-backend-one-lake.vercel.app/agents");
 
   const fetchedAgents = data?.data || [];
 
@@ -28,7 +28,7 @@ export function AgentsProvider({ children }) {
     e.preventDefault();
 
     try {
-      const res = await fetch(`http://localhost:3001/agents`, {
+      const res = await fetch(`https://crm-backend-one-lake.vercel.app/agents`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,8 +43,8 @@ export function AgentsProvider({ children }) {
 
         const updatedAgents =
           agentsState.length > 0
-            ? [...agentsState, data.data]
-            : [...fetchedAgents, data.data];
+            ? [...agentsState, data?.data]
+            : [...fetchedAgents, data?.data];
 
         setAgentsState(updatedAgents);
 
@@ -58,7 +58,7 @@ export function AgentsProvider({ children }) {
 
   const deleteListByAgent = async (agentName) => {
     try {
-      const res = await fetch(`http://localhost:3001/agents/${agentName}`, {
+      const res = await fetch(`https://crm-backend-one-lake.vercel.app/agents/${agentName}`, {
         method: "DELETE",
       });
 

@@ -12,7 +12,7 @@ const LeadStatusView = () => {
 
   const { leadsStatus, allLeads } = useContext(LeadContext);
 
-  useFetch(`http://localhost:3001/leads/${statusValue}`);
+  useFetch(`https://crm-backend-one-lake.vercel.app/leads/${statusValue}`);
 
   const allFilteredLead = allLeads
     ?.filter((lead) =>

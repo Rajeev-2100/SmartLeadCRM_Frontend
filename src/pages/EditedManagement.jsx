@@ -72,7 +72,7 @@ const EditedManagement = () => {
     };
 
     try {
-      const res = await fetch(`http://localhost:3001/leads/${leadId}`, {
+      const res = await fetch(`https://crm-backend-one-lake.vercel.app/leads/${leadId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ const EditedManagement = () => {
     }
 
     try {
-      const res = await fetch(`http://localhost:3001/leads/${leadId}`, {
+      const res = await fetch(`https://crm-backend-one-lake.vercel.app/leads/${leadId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
