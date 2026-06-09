@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 const LeadContext = createContext();
 
 export function LeadProvider({ children }) {
-  const { data } = useFetch(`https://crm-backend-one-lake.vercel.app/leads/`);
+  const { data } = useFetch(`https://crm-backend-tawny.vercel.app/leads/`);
 
   const leads = data?.data || [];
 
   const { data: statusValue } = useFetch(
-    `https://crm-backend-one-lake.vercel.app/leads/status-count`,
+    `https://crm-backend-tawny.vercel.app/leads/status-count`,
   );
 
   const leadsStatus = statusValue?.data;
@@ -43,7 +43,7 @@ export function LeadProvider({ children }) {
     };
 
     try {
-      const res = await fetch(`https://crm-backend-one-lake.vercel.app/leads`, {
+      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export function LeadProvider({ children }) {
 
   const deletedLeadByLeadId = async (leadId) => {
     try {
-      const res = await fetch(`https://crm-backend-one-lake.vercel.app/leads/${leadId}`, {
+      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads/${leadId}`, {
         method: "DELETE",
       });
 

@@ -34,7 +34,7 @@ export const options = {
 
 export const VerticalChart = () => {
   const { data: leadClosed } = useFetch(
-    "https://crm-backend-one-lake.vercel.app/leads/status-count",
+    "https://crm-backend-tawny.vercel.app/leads/status-count",
   );
   
   const { allLeads } = useContext(LeadContext);

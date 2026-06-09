@@ -22,12 +22,12 @@ const LeadManagement = () => {
   const leadDetails = leads?.find((lead) => lead._id === leadId);
 
   const { data: leadComment } = useFetch(
-    `https://crm-backend-one-lake.vercel.app/leads/${leadId}/comments`,
+    `https://crm-backend-tawny.vercel.app/leads/${leadId}/comments`,
   );
 
   const deletedLead = async (leadId) => {
     try {
-      const res = await fetch(`https://crm-backend-one-lake.vercel.app/leads/${leadId}`, {
+      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads/${leadId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ const LeadManagement = () => {
 
     try {
       const res = await fetch(
-        `https://crm-backend-one-lake.vercel.app/leads/${leadId}/comments`,
+        `https://crm-backend-tawny.vercel.app/leads/${leadId}/comments`,
         {
           method: "POST",
           headers: {

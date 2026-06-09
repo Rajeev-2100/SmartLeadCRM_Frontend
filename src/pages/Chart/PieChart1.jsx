@@ -8,7 +8,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PieChart1 = () => {
   const { data: leadStatusClose } = useFetch(
-    `https://crm-backend-one-lake.vercel.app/report/last-week`,
+    `https://crm-backend-tawny.vercel.app/report/last-week`,
   );
 
   const closedLeads = leadStatusClose?.data?.length || 0;
