@@ -7,48 +7,32 @@ import ManagementHeader from "../components/Header/ManagementHeader";
 import AgentsContext from "../context/AgentsContext";
 
 const LeadManagement = () => {
-  const { leads } = useContext(LeadContext);
+  const { leadId } = useParams();
+  const { allLeads } = useContext(LeadContext);
+
+  const leadDetails = allLeads?.find((lead) => lead._id === leadId);
   const { displayAgents } = useContext(AgentsContext);
+
+  const navigation = useNavigate();
 
   const [selectedAuthorId, setSelectedAuthorId] = useState("");
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
+  console.log("All Leads Data: ", allLeads);
+
   const navigate = useNavigate();
 
-  const { leadId } = useParams();
-
-  const leadDetails = leads?.find((lead) => lead._id === leadId);
 
   const { data: leadComment } = useFetch(
     `https://crm-backend-tawny.vercel.app/leads/${leadId}/comments`,
   );
 
-  const deletedLead = async (leadId) => {
-    try {
-      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads/${leadId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Lead deleted successfully");
-
-        navigate("/leads");
-      } else {
-        console.error(data.message);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const displayComments = comments.length > 0 ? [...(leadComment?.data || []), ...comments] : leadComment?.data || [];
+  const displayComments =
+    comments.length > 0
+      ? [...(leadComment?.data || []), ...comments]
+      : leadComment?.data || [];
 
   const formCommentSubmit = async (e) => {
     e.preventDefault();
@@ -153,7 +137,7 @@ const LeadManagement = () => {
                     </p>
 
                     <p className="fs-5">
-                      <strong>Tags :</strong> {leadDetails?.tags.join(', ')}
+                      <strong>Tags :</strong> {leadDetails?.tags?.join(", ")}
                     </p>
                   </div>
 
@@ -183,7 +167,10 @@ const LeadManagement = () => {
                   </Link>
 
                   <button
-                    onClick={() => deletedLead(leadDetails?._id)}
+                    onClick={() => {
+                      deletedLeadByLeadId(leadDetails?._id);
+                      navigate("/leads");
+                    }}
                     className="btn btn-dark"
                   >
                     Delete Lead

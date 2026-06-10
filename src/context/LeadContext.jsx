@@ -1,21 +1,30 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import useFetch from "../useFetch";
 import { useNavigate } from "react-router-dom";
+import AgentsContext from "./AgentsContext";
 
 const LeadContext = createContext();
 
 export function LeadProvider({ children }) {
-  const { data } = useFetch(`https://crm-backend-tawny.vercel.app/leads/`);
+  const { displayAgents } = useContext(AgentsContext);
 
-  const leads = data?.data || [];
+  const { data } = useFetch("https://crm-backend-tawny.vercel.app/leads/");
 
   const { data: statusValue } = useFetch(
-    `https://crm-backend-tawny.vercel.app/leads/status-count`,
+    "https://crm-backend-tawny.vercel.app/leads/status-count",
   );
 
   const leadsStatus = statusValue?.data;
 
-  const [newLeadData, setNewLeadData] = useState([]);
+  const [allLeads, setAllLeads] = useState([]);
+
+  useEffect(() => {
+    if (data?.data) {
+      setAllLeads(data.data);
+    }
+  }, [data]);
+
+  const navigation = useNavigate();
 
   const [name, setName] = useState("");
   const [leadSource, setLeadSource] = useState("");
@@ -24,10 +33,6 @@ export function LeadProvider({ children }) {
   const [priority, setPriority] = useState("");
   const [timeToClose, setTimeToClose] = useState(0);
   const [tags, setTags] = useState("");
-
-  const navigation = useNavigate();
-
-  const allLeads = newLeadData.length > 0 ? newLeadData : leads;
 
   const formLeadHandler = async (e) => {
     e.preventDefault();
@@ -43,7 +48,7 @@ export function LeadProvider({ children }) {
     };
 
     try {
-      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads`, {
+      const res = await fetch("https://crm-backend-tawny.vercel.app/leads", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,37 +56,33 @@ export function LeadProvider({ children }) {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      const result = await res.json();
 
-      if (
-        res.ok &&
-        name !== "" &&
-        leadSource !== "" &&
-        salesAgentId !== "" &&
-        status !== "" &&
-        priority !== "" &&
-        timeToClose !== 0 &&
-        tags !== ""
-      ) {
+      if (res.ok) {
         alert("Successfully Added the Lead Details");
 
-        const updatedLeads =
-          newLeadData.length > 0
-            ? [...newLeadData, data?.data]
-            : [...leads, data?.data];
+        const selectedAgent = displayAgents.find(
+          (agent) => agent._id === salesAgentId,
+        );
 
-        setNewLeadData(updatedLeads);
+        const newLead = {
+          ...result.data,
+          salesAgent: selectedAgent,
+        };
+
+        console.log('New Leads: ',newLead)
+
+        setAllLeads((prev) => [...prev, newLead]);
+        setName("");
+        setLeadSource("");
+        setSalesAgentId("");
+        setStatus("");
+        setPriority("");
+        setTimeToClose(0);
+        setTags("");
 
         navigation("/leads");
       }
-
-      setName("");
-      setLeadSource("");
-      setSalesAgentId("");
-      setStatus("");
-      setPriority("");
-      setTimeToClose("");
-      setTags("");
     } catch (error) {
       console.log(error);
     }
@@ -89,50 +90,52 @@ export function LeadProvider({ children }) {
 
   const deletedLeadByLeadId = async (leadId) => {
     try {
-      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads/${leadId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `https://crm-backend-tawny.vercel.app/leads/${leadId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (res.ok) {
         alert("Successfully Deleted Lead");
 
-        const updatedLeads =
-          newLeadData.length > 0
-            ? newLeadData.filter((lead) => lead._id !== leadId)
-            : leads.filter((lead) => lead._id !== leadId);
+        setAllLeads((prev) => {
+          const updated = prev.filter((lead) => lead._id !== leadId);
 
-        setNewLeadData(updatedLeads);
+          console.log(updated);
+
+          return updated;
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const uniqueTags = [...new Set(allLeads?.flatMap((lead) => lead.tags))];
+  const uniqueTags = [...new Set(allLeads.flatMap((lead) => lead.tags))];
 
-  const uniqueSources = [...new Set(allLeads?.map((lead) => lead.source))];
+  const uniqueSources = [...new Set(allLeads.map((lead) => lead.source))];
 
   const uniqueAgents = [
     ...new Map(
       allLeads
-        ?.filter((lead) => lead.salesAgent)
-        ?.map((lead) => [lead.salesAgent._id, lead.salesAgent]),
+        .filter((lead) => lead.salesAgent)
+        .map((lead) => [lead.salesAgent._id, lead.salesAgent]),
     ).values(),
   ];
 
-  const uniquePriorities = [...new Set(allLeads?.map((lead) => lead.priority))];
+  const uniquePriorities = [...new Set(allLeads.map((lead) => lead.priority))];
 
-  const uniqueStatus = [...new Set(allLeads?.map((lead) => lead.status))];
+  const uniqueStatus = [...new Set(allLeads.map((lead) => lead.status))];
 
   return (
     <LeadContext.Provider
       value={{
         leadsStatus,
 
-        leads,
         allLeads,
-        newLeadData,
-        setNewLeadData,
+        setAllLeads,
 
         name,
         setName,
@@ -159,10 +162,10 @@ export function LeadProvider({ children }) {
         deletedLeadByLeadId,
 
         uniqueTags,
-        uniqueStatus,
         uniqueSources,
-        uniquePriorities,
         uniqueAgents,
+        uniquePriorities,
+        uniqueStatus,
       }}
     >
       {children}

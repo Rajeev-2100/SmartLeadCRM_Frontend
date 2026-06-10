@@ -5,7 +5,6 @@ import LeadContext from "./LeadContext";
 const AgentsContext = createContext();
 
 export function AgentsProvider({ children }) {
-  const { allLeads } = useContext(LeadContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

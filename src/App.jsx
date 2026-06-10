@@ -8,15 +8,14 @@ import MainHeader from "./components/Header/MainHeader.jsx";
 import '../src/styles.css'
 
 function App() {
-  const { allLeads, leadsStatus, newLeadData } = useContext(LeadContext);
+  const { allLeads, leadsStatus } = useContext(LeadContext);
 
   const [selectedStatus, setSelectedStatus] = useState("none");
 
   const filteredStatus =
     selectedStatus === "none" || selectedStatus === ""
       ? allLeads
-      : allLeads?.filter((lead) => lead.status === selectedStatus) ||
-        newLeadData?.filter((lead) => lead.status === selectedStatus);
+      : allLeads?.filter((lead) => lead.status === selectedStatus) 
 
   return (
     <>
