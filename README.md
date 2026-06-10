@@ -13,11 +13,11 @@ A modern Customer Relationship Management (CRM) dashboard built with React.js fo
 
 ## 🌐 Live Demo
 
-### Frontend
+### Frontend APP
 
 https://crm-frontend-jade-alpha.vercel.app/
 
-### Backend API
+### Backend APP
 
 https://crm-backend-tawny.vercel.app
 
@@ -99,6 +99,12 @@ Filter leads by:
 * Desktop optimized
 * Bootstrap 5 components
 
+### 🔔 Notifications
+
+* Success notifications
+* Error notifications
+* User feedback using React Toastify
+
 ---
 
 ## 🛠️ Tech Stack
@@ -111,6 +117,10 @@ Filter leads by:
 * Bootstrap 5
 * JavaScript (ES6+)
 * Vite
+* PieChart
+* Fetch API
+* Bootstrap 5
+
 
 ### Backend
 
@@ -128,12 +138,24 @@ Filter leads by:
 ## 📂 Project Structure
 
 ```bash
-src
-│
-├── components
-│   ├── Header
+
+src/
+├── components/
+│   ├── Header/
+│   │   ├── AddAgentHeader.jsx
+│   │   ├── AddLeadFormHeader.jsx
+│   │   ├── AgentsHeader.jsx
+│   │   ├── EditedManagementHeader.jsx
+│   │   ├── LeadListHeader.jsx
+│   │   ├── LeadStatusHeader.jsx
+│   │   ├── MainHeader.jsx
+│   │   ├── ManagementHeader.jsx
+│   │   ├── ReportHeader.jsx
+│   │   ├── SalesAgentHeaderView.jsx
+│   │   └── SettingHeader.jsx
+│   │
 │   └── Footer
-│
+|
 ├── context
 │   ├── LeadContext.jsx
 │   └── AgentsContext.jsx
