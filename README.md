@@ -15,7 +15,7 @@ A modern Customer Relationship Management (CRM) dashboard built with React.js fo
 
 ### Frontend
 
-https://major-project-frontend1.vercel.app/
+https://crm-frontend-jade-alpha.vercel.app/
 
 ### Backend API
 
