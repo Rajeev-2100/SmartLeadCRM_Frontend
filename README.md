@@ -13,25 +13,9 @@ A modern Customer Relationship Management (CRM) dashboard built with React.js fo
 
 ## 🌐 Live Demo
 
-### Frontend APP
+### Frontend App
 
 https://crm-frontend-jade-alpha.vercel.app/
-
-### Backend APP
-
-https://crm-backend-tawny.vercel.app
-
----
-
-## 🔗 Repository
-
-### Frontend Repository
-
-https://github.com/Rajeev-2100/CRM_Frontend
-
-### Backend Repository
-
-https://github.com/Rajeev-2100/CRM_Backend
 
 ---
 
