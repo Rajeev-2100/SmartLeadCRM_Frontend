@@ -1,17 +1,14 @@
-const LeadStatusHeader = () => {
+import { FaBars } from "react-icons/fa";
+import PageHeader from "./PageHeader";
+
+const LeadStatusHeader = ({ toggleSidebar }) => {
   return (
     <>
       <>
-        <header>
-          <nav className="navbar navbar-expand-lg bg-body-tertiary">
-            <div className="container-fluid d-flex justify-content-center py-4">
-              <h5>Lead by Status</h5>
-            </div>
-          </nav>
-        </header>
+        <PageHeader title="Lead By Status" toggleSidebar={toggleSidebar} />
       </>
     </>
-  )
-}
+  );
+};
 
-export default LeadStatusHeader
+export default LeadStatusHeader;

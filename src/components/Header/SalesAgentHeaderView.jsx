@@ -1,15 +1,15 @@
-const SalesAgentHeaderView = () => {
+import { FaBars } from "react-icons/fa";
+import PageHeader from "./PageHeader";
+
+const SalesAgentHeaderView = ({ toggleSidebar, title }) => {
   return (
     <>
-      <header>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-          <div className="container-fluid d-flex justify-content-center py-4">
-            <h5>Leads By Sales Agent</h5>
-          </div>
-        </nav>
-      </header>
+    <PageHeader
+      title="Lead By Sales Agent"
+      toggleSidebar={toggleSidebar}
+    />
     </>
   );
 };
 
-export default SalesAgentHeaderView
+export default SalesAgentHeaderView;

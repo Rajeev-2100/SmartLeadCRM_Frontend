@@ -1,15 +1,13 @@
-const ReportHeader = () => {
+import { FaBars } from "react-icons/fa";
+import PageHeader from "./PageHeader";
+
+const ReportHeader = ({ toggleSidebar, title }) => {
   return (
-    <>
-      <header>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-          <div className="container-fluid d-flex justify-content-center py-4">
-            <h5>Report</h5>
-          </div>
-        </nav>
-      </header>
-    </>
+   <PageHeader
+      title="Report"
+      toggleSidebar={toggleSidebar}
+    />
   );
 };
 
-export default ReportHeader
+export default ReportHeader;

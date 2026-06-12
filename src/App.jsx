@@ -5,54 +5,62 @@ import Footer from "./components/Footer";
 import { useContext, useState } from "react";
 import LeadContext from "./context/LeadContext.jsx";
 import MainHeader from "./components/Header/MainHeader.jsx";
-import '../src/styles.css'
+import "../src/styles.css";
 
 function App() {
   const { allLeads, leadsStatus } = useContext(LeadContext);
 
   const [selectedStatus, setSelectedStatus] = useState("none");
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const filteredStatus =
     selectedStatus === "none" || selectedStatus === ""
       ? allLeads
-      : allLeads?.filter((lead) => lead.status === selectedStatus) 
+      : allLeads?.filter((lead) => lead.status === selectedStatus);
+
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+  };
 
   return (
     <>
-      <MainHeader />
+      <MainHeader toggleSidebar={toggleSidebar} />
 
       <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
-        <div className="row g-3">
-          <div className="col-12 col-md-3">
-            <div className="border rounded p-4 bg-light h-100">
-              <h3 className="text-center mb-4">SideBar</h3>
+        <div className='row g-3'>
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div className="border rounded p-4 bg-light h-100">
+                <h3 className="text-center mb-4">SideBar</h3>
 
-              <div className="d-flex flex-column gap-3 text-center">
-                <Link className="btn btn-outline-secondary" to={`/leads`}>
-                  Leads
-                </Link>
+                <div className="d-flex flex-column gap-3 text-center">
+                  <Link className="btn btn-outline-secondary" to="/leads">
+                    Leads
+                  </Link>
 
-                <Link className="btn btn-outline-secondary" to={`/salesView`}>
-                  Sales
-                </Link>
+                  <Link className="btn btn-outline-secondary" to="/salesView">
+                    Sales
+                  </Link>
 
-                <Link className="btn btn-outline-secondary" to={`/agents`}>
-                  Agents
-                </Link>
+                  <Link className="btn btn-outline-secondary" to="/agents">
+                    Agents
+                  </Link>
 
-                <Link className="btn btn-outline-secondary" to={`/reports`}>
-                  Reports
-                </Link>
+                  <Link className="btn btn-outline-secondary" to="/reports">
+                    Reports
+                  </Link>
 
-                <Link className="btn btn-outline-secondary" to={`/settings`}>
-                  Settings
-                </Link>
+                  <Link className="btn btn-outline-secondary" to="/settings">
+                    Settings
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+    
 
-          <div className="col-12 col-md-9">
-            <div className="bg-danger rounded p-3 p-md-4 text-white">
+          <div className={showSidebar ? "col-12 col-md-9" : 'col-12'}>
+            <div className="bg-danger rounded p-3 p-md-4 text-white w-100">
               <h3 className="text-center mb-4">Main Content</h3>
 
               <div className="row g-3">

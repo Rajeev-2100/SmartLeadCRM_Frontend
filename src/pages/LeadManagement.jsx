@@ -7,6 +7,12 @@ import ManagementHeader from "../components/Header/ManagementHeader";
 import AgentsContext from "../context/AgentsContext";
 
 const LeadManagement = () => {
+  const [showSidebar, setShowSidebar] = useState(true);
+
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+  };
+
   const { leadId } = useParams();
   const { allLeads } = useContext(LeadContext);
 
@@ -23,7 +29,6 @@ const LeadManagement = () => {
   console.log("All Leads Data: ", allLeads);
 
   const navigate = useNavigate();
-
 
   const { data: leadComment } = useFetch(
     `https://crm-backend-tawny.vercel.app/leads/${leadId}/comments`,
@@ -94,7 +99,7 @@ const LeadManagement = () => {
 
   return (
     <>
-      <ManagementHeader />
+      <ManagementHeader toggleSidebar={toggleSidebar} />
 
       <main
         className="container-fluid py-3 pb-5"
@@ -102,25 +107,27 @@ const LeadManagement = () => {
       >
         <div className="row g-3">
           {/* Sidebar */}
-          <div className="col-12 col-md-3">
-            <div className="bg-light border rounded p-4 h-100">
-              <h3 className="text-center fw-bold mb-4">Sidebar</h3>
-
-              <hr />
-
-              <div className="d-grid">
-                <Link className="btn btn-outline-secondary" to={`/`}>
-                  Back to Dashboard
-                </Link>
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div className="bg-white shadow rounded-4 p-4 h-100">
+                <h3 className="text-center mb-4">Sidebar</h3>
+                <div className="d-flex flex-column gap-3">
+                  <Link className="btn btn-outline-secondary" to="/">
+                    <h5 className="mb-0">Back to Dashboard</h5>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-12 col-md-9">
-            <div className="bg-danger text-white rounded p-3 p-md-4">
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
               <h2 className="text-center fw-bold mb-4">Lead Details</h2>
 
-              <div className="bg-light text-dark rounded p-4 shadow-sm">
+              <div
+                className="w-75 mt-3 d-flex justify-content-center flex-column"
+                style={{ height: "100%" }}
+              >
                 <div className="row g-3">
                   <div className="col-12 col-md-6">
                     <p className="fs-5">

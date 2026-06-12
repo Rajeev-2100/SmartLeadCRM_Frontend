@@ -6,6 +6,7 @@ import LeadContext from "../context/LeadContext";
 import useFetch from "../useFetch";
 
 const LeadStatusView = () => {
+  const [showSidebar, setShowSidebar] = useState(true);
   const [statusValue, setStatusValue] = useState("none");
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
   const [priorityValue, setPriorityValue] = useState("none");
@@ -38,29 +39,35 @@ const LeadStatusView = () => {
 
   const uniqueTimes = [...new Set(allLeads?.map((lead) => lead.timeToClose))];
 
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+  };
+
   return (
     <>
-      <LeadStatusHeader />
+      <LeadStatusHeader toggleSidebar={toggleSidebar}/>
       <main
         className="container-fluid py-3 pb-5"
         style={{ minHeight: "100vh" }}
       >
         <div className="row g-3">
-          <div className="col-12 col-md-3">
-            <div className="bg-light border rounded p-4 h-100">
-              <h3 className="text-center mb-4">SideBar</h3>
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div className="bg-light border rounded p-4 h-100">
+                <h3 className="text-center mb-4">SideBar</h3>
 
-              <hr />
+                <hr />
 
-              <div className="d-grid">
-                <Link className="btn btn-outline-secondary" to={`/`}>
-                  Back to Dashboard
-                </Link>
+                <div className="d-grid">
+                  <Link className="btn btn-outline-secondary" to={`/`}>
+                    Back to Dashboard
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-12 col-md-9">
+          <div className={showSidebar ? "col-12 col-md-9" : 'col-12'}>
             <div className="bg-danger rounded p-3 p-md-4 text-white">
               <h2 className="fw-bold text-center mb-4">Lead List by Status</h2>
 

@@ -2,9 +2,15 @@ import { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import LeadContext from "../context/LeadContext";
 import AddLeadFormHeader from "../components/Header/AddLeadFormHeader";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddLeadForm = () => {
+  const [showSidebar, setShowSidebar] = useState(true);
+
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+  };
+
   const {
     leadsStatus,
     leads,
@@ -32,173 +38,144 @@ const AddLeadForm = () => {
 
   return (
     <>
-      <AddLeadFormHeader />
+      <AddLeadFormHeader toggleSidebar={toggleSidebar} />
 
-      <main
-        className="container-fluid py-4"
-        style={{
-          backgroundColor: "#f4f7fb",
-          minHeight: "100vh",
-        }}
-      >
-        <div className="row justify-content-center">
-          <div className="col-12 col-md-10 col-lg-8">
-            <div className="bg-white shadow rounded-4 p-4 p-md-5">
-              <div className="text-center mb-5">
-                <h2 className="fw-bold">Lead Management Form</h2>
-
-                <p className="text-secondary mb-0">
-                  Create and manage new sales leads.
-                </p>
+      <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
+        <div className="row g-3">
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div className="bg-white shadow rounded-4 p-4 h-100">
+                <h3 className="text-center mb-4">SideBar</h3>
+                <div className="d-flex flex-column gap-3">
+                  <Link className="btn btn-outline-secondary" to="/">
+                    <h5 className="mb-0">Back to Dashboard</h5>
+                  </Link>
+                </div>
               </div>
+            </div>
+          )}
 
-              <form onSubmit={formLeadHandler}>
-                <div className="row g-4">
-                  {/* Lead Name */}
-                  <div className="col-12">
-                    <label htmlFor="name" className="form-label fw-semibold">
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
+              <h3 className="fs-2 text-center mb-4">Lead Management Form</h3>
+
+              <div className="w-75 mx-auto mt-3">
+                <form onSubmit={formLeadHandler}>
+                  <div className="mb-4">
+                    <label
+                      htmlFor="name"
+                      className="form-label fs-4 text-white"
+                    >
                       Lead Name
                     </label>
 
                     <input
-                      type="text"
-                      id="name"
-                      placeholder="Enter lead name"
                       className="form-control form-control-lg"
-                      value={name}
+                      type="text"
+                      placeholder="Enter Lead Name"
+                      value={name || ""}
                       onChange={(e) => setName(e.target.value)}
                     />
                   </div>
 
-                  <div className="col-12 col-md-6">
-                    <label
-                      htmlFor="leadSource"
-                      className="form-label fw-semibold"
-                    >
+                  <div className="my-4">
+                    <label className="form-label fs-4 text-white">
                       Lead Source
                     </label>
 
                     <select
-                      name="leadSource"
-                      id="leadSource"
-                      value={leadSource || ""}
                       className="form-select form-select-lg"
+                      value={leadSource || ""}
                       onChange={(e) => setLeadSource(e.target.value)}
                     >
                       <option value="">Select Lead Source</option>
 
                       {uniqueSources?.map((source, index) => (
-                        <option value={source} key={index}>
+                        <option key={index} value={source}>
                           {source}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="col-12 col-md-6">
-                    <label
-                      htmlFor="salesAgent"
-                      className="form-label fw-semibold"
-                    >
+                  <div className="my-4">
+                    <label className="form-label fs-4 text-white">
                       Sales Agent
                     </label>
 
                     <select
-                      name="salesAgent"
-                      id="salesAgent"
-                      value={salesAgentId || ""}
                       className="form-select form-select-lg"
+                      value={salesAgentId || ""}
                       onChange={(e) => setSalesAgentId(e.target.value)}
                     >
                       <option value="">Select Sales Agent</option>
 
                       {uniqueAgents?.map((agent) => (
-                        <option value={agent._id} key={agent._id}>
+                        <option key={agent._id} value={agent._id}>
                           {agent.name}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="col-12 col-md-6">
-                    <label
-                      htmlFor="leadStatus"
-                      className="form-label fw-semibold"
-                    >
+                  <div className="my-4">
+                    <label className="form-label fs-4 text-white">
                       Lead Status
                     </label>
 
                     <select
-                      name="status"
-                      id="leadStatus"
-                      value={status || ""}
                       className="form-select form-select-lg"
+                      value={status || ""}
                       onChange={(e) => setStatus(e.target.value)}
                     >
                       <option value="">Select Status</option>
 
                       {uniqueStatus?.map((status, index) => (
-                        <option value={status} key={index}>
+                        <option key={index} value={status}>
                           {status}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="col-12 col-md-6">
-                    <label
-                      htmlFor="leadPriority"
-                      className="form-label fw-semibold"
-                    >
+                  <div className="my-4">
+                    <label className="form-label fs-4 text-white">
                       Priority
                     </label>
 
                     <select
-                      name="priority"
-                      id="leadPriority"
-                      value={priority || ""}
                       className="form-select form-select-lg"
+                      value={priority || ""}
                       onChange={(e) => setPriority(e.target.value)}
                     >
                       <option value="">Select Priority</option>
 
                       {uniquePriorities?.map((pri, index) => (
-                        <option value={pri} key={index}>
+                        <option key={index} value={pri}>
                           {pri}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="col-12">
-                    <label
-                      htmlFor="timeToClose"
-                      className="form-label fw-semibold"
-                    >
+                  <div className="my-4">
+                    <label className="form-label fs-4 text-white">
                       Time To Close
                     </label>
 
                     <input
-                      type="number"
-                      id="timeToClose"
-                      placeholder="Days to close"
                       className="form-control form-control-lg"
+                      type="number"
+                      placeholder="Days to close"
                       value={timeToClose || ""}
                       onChange={(e) => setTimeToClose(e.target.value)}
                     />
                   </div>
 
-                  <div className="col-12">
-                    <label
-                      htmlFor="leadTags"
-                      className="form-label fw-semibold"
-                    >
-                      Tags
-                    </label>
+                  <div className="my-4">
+                    <label className="form-label fs-4 text-white">Tags</label>
 
                     <select
-                      name="tags"
-                      id="leadTags"
                       className="form-select form-select-lg"
                       value={tags || ""}
                       onChange={(e) => setTags(e.target.value)}
@@ -206,23 +183,24 @@ const AddLeadForm = () => {
                       <option value="">Select Tag</option>
 
                       {uniqueTags?.map((tag, index) => (
-                        <option value={tag} key={index}>
+                        <option key={index} value={tag}>
                           {tag}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="col-12 pt-2">
+                  <div className="text-center mt-5">
                     <button
-                      className="btn btn-primary btn-lg w-100 rounded-3"
+                      className="btn btn-primary px-5 py-2 fw-bold"
+                      style={{ width: "30vw" }}
                       type="submit"
                     >
                       Create Lead
                     </button>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
         </div>

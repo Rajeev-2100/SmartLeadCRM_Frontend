@@ -7,6 +7,7 @@ import AgentsContext from "../context/AgentsContext";
 
 const EditedManagement = () => {
   const { leadId } = useParams();
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const navigation = useNavigate();
 
@@ -72,13 +73,16 @@ const EditedManagement = () => {
     };
 
     try {
-      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads/${leadId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `https://crm-backend-tawny.vercel.app/leads/${leadId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
 
       const data = await res.json();
 
@@ -131,13 +135,16 @@ const EditedManagement = () => {
     }
 
     try {
-      const res = await fetch(`https://crm-backend-tawny.vercel.app/leads/${leadId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `https://crm-backend-tawny.vercel.app/leads/${leadId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       const data = await res.json();
 
@@ -189,28 +196,33 @@ const EditedManagement = () => {
         }}
       >
         <div className="row g-4">
-          <div className="col-12 col-md-3">
-            <div
-              className="bg-white shadow-sm rounded-4 p-4 h-100"
-              style={{
-                minHeight: "85vh",
-              }}
-            >
-              <h4 className="fw-bold text-center mb-4">Sidebar</h4>
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div
+                className="bg-white shadow-sm rounded-4 p-4 h-100"
+                style={{
+                  minHeight: "85vh",
+                }}
+              >
+                <h4 className="fw-bold text-center mb-4">Sidebar</h4>
 
-              <hr />
+                <hr />
 
-              <div className="d-grid gap-3">
-                <Link className="btn btn-outline-secondary rounded-3" to="/">
-                  Back to Dashboard
-                </Link>
+                <div className="d-grid gap-3">
+                  <Link className="btn btn-outline-secondary rounded-3" to="/">
+                    Back to Dashboard
+                  </Link>
 
-                <Link className="btn btn-outline-primary rounded-3" to="/leads">
-                  Back to Leads
-                </Link>
+                  <Link
+                    className="btn btn-outline-primary rounded-3"
+                    to="/leads"
+                  >
+                    Back to Leads
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="col-12 col-md-9">
             <div className="bg-white shadow rounded-4 p-4 p-md-5">

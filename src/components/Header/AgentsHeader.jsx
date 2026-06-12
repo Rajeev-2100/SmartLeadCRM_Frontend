@@ -1,15 +1,15 @@
-const AgentsHeader = () => {
+import { FaBars } from "react-icons/fa";
+import PageHeader from "./PageHeader";
+
+const AgentsHeader = ({ toggleSidebar }) => {
   return (
     <>
-      <header>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-          <div className="container-fluid d-flex justify-content-center py-4">
-            <h5>Sales Agent Management</h5>
-          </div>
-        </nav>
-      </header>
+      <PageHeader
+      title="Sales Agent Management"
+      toggleSidebar={toggleSidebar}
+    />
     </>
   );
 };
 
-export default AgentsHeader
+export default AgentsHeader;

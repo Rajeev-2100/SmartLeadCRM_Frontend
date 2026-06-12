@@ -9,7 +9,7 @@ import useFetch from "../useFetch";
 const AgentsList = () => {
   const { agents, allAgents, newAgentData } = useContext(AgentsContext);
   const { allLeads } = useContext(LeadContext);
-  // console.log("Agent Name: ", allAgents);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   console.log("AllLead: ", allLeads);
   const [agentName, setAgentName] = useState("none");
@@ -43,9 +43,13 @@ const AgentsList = () => {
     ...new Map(allLeads?.map((lead) => [lead.timeToClose, lead])).values(),
   ];
 
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+  };
+
   return (
     <>
-      <SalesAgentHeaderView />
+      <SalesAgentHeaderView toggleSidebar={toggleSidebar} />
       <main
         className="container-fluid py-4"
         style={{
@@ -54,40 +58,35 @@ const AgentsList = () => {
         }}
       >
         <div className="row g-4">
-          <div className="col-12 col-md-3">
-            <div
-              className="bg-white shadow-sm rounded-4 p-4 h-100"
-              style={{
-                minHeight: "85vh",
-              }}
-            >
-              <h4 className="fw-bold text-center mb-4">Sidebar</h4>
-
-              <hr />
-
-              <div className="d-grid gap-3">
-                <Link className="btn btn-outline-secondary rounded-3" to="/">
-                  Back to Dashboard
-                </Link>
-
-                <Link className="btn btn-primary rounded-3" to="/addNewAgents">
-                  Add New Agent
-                </Link>
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div className="bg-white shadow rounded-4 p-4 h-100">
+                <h3 className="text-center mb-4">SideBar</h3>
+                <div className="d-flex flex-column gap-3">
+                  <Link className="btn btn-outline-secondary" to="/">
+                    <h5 className="mb-0">Back to Dashboard</h5>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-12 col-md-9">
-            <div className="bg-white shadow rounded-4 p-4 p-md-5">
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div
+              className="bg-danger rounded-4 shadow-lg p-4 p-md-5"
+            >
+              {" "}
               <div className="text-center mb-5">
-                <h2 className="fw-bold">Lead List By Agent</h2>
+                <h2 className="fw-bold text-dark">Lead List By Agent</h2>
 
-                <p className="text-secondary mb-0">
+                <p className="text-muted mb-0">
                   Filter leads by agent, priority, and closing time.
                 </p>
               </div>
-
-              <div className="row g-4 mb-5">
+              <div
+                className="row g-4 mb-5 rounded-4 p-4 shadow-sm"
+                style={{ backgroundColor: "#ffffff" }}
+              >
                 <div className="col-12 col-md-4">
                   <label htmlFor="agent" className="form-label fw-semibold">
                     Filter Agent
@@ -154,17 +153,19 @@ const AgentsList = () => {
                   </select>
                 </div>
               </div>
-
               <div className="row g-4">
                 {displayFilteredValue?.length > 0 ? (
                   displayFilteredValue?.map((lead) => (
                     <div className="col-12" key={lead._id}>
-                      <div className="border rounded-4 p-4 shadow-sm">
+                      <div
+                        className="rounded-4 p-4 shadow-sm border-0"
+                        style={{ backgroundColor: "#ffffff" }}
+                      >
                         <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                           <div>
                             <h5 className="fw-bold mb-1">{lead.name}</h5>
 
-                            <p className="text-secondary mb-0">
+                            <p className="text-muted mb-0">
                               Assigned Agent:{" "}
                               <span className="fw-semibold">
                                 {lead.salesAgent?.name || "No Assigned"}
@@ -173,7 +174,7 @@ const AgentsList = () => {
                           </div>
 
                           <div className="d-flex gap-2 flex-wrap">
-                            <span className="badge bg-primary px-3 py-2">
+                            <span className="badge bg-warning text-dark px-3 py-2">
                               {lead.priority}
                             </span>
 
@@ -181,7 +182,7 @@ const AgentsList = () => {
                               {lead.status}
                             </span>
 
-                            <span className="badge bg-dark px-3 py-2">
+                            <span className="badge bg-secondary px-3 py-2">
                               {lead.timeToClose} Days
                             </span>
                           </div>

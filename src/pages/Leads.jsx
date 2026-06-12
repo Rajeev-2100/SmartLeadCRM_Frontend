@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import LeadListHeader from "../components/Header/LeadListHeader";
 
 const Leads = () => {
+  const [showSidebar, setShowSidebar] = useState(true);
   const { allLeads, newLeadData } = useContext(LeadContext);
 
   const displayLeads = newLeadData?.length > 0 ? newLeadData : allLeads;
@@ -38,28 +39,31 @@ const Leads = () => {
     ...new Set(displayLeads?.map((lead) => lead.timeToClose)),
   ];
 
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+  };
+
   return (
     <>
-      <LeadListHeader />
+      <LeadListHeader toggleSidebar={toggleSidebar}/>
 
       <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
         <div className="row g-3">
-          <div className="col-12 col-md-3">
-            <div className="bg-light border rounded p-4 h-100">
-              <h3 className="text-center mb-4">SideBar</h3>
-
-              <hr />
-
-              <div className="d-grid">
-                <Link className="btn btn-outline-secondary" to={`/`}>
-                  Back to Dashboard
-                </Link>
+          {showSidebar && (
+            <div className="col-12 col-md-3">
+              <div className="bg-white shadow rounded-4 p-4 h-100">
+                <h3 className="text-center mb-4">SideBar</h3>
+                <div className="d-flex flex-column gap-3">
+                  <Link className="btn btn-outline-secondary" to="/">
+                    <h5 className="mb-0">Back to Dashboard</h5>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-12 col-md-9">
-            <div className="bg-danger rounded p-3 p-md-4 text-white">
+          <div className={showSidebar ? 'col-12 col-md-9' : 'col-12'}>
+            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
               <h2 className="fw-bold text-center mb-4">Leads Management</h2>
 
               <div className="bg-light text-dark rounded p-3 mb-4">

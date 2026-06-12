@@ -1,15 +1,12 @@
-const AddAgentHeader = () => {
+import PageHeader from "./PageHeader";
+
+const AddAgentHeader = ({ toggleSidebar, title }) => {
   return (
-    <>
-      <header>
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-          <div className="container-fluid d-flex justify-content-center py-4">
-            <h5>Add New Sales Agent</h5>
-          </div>
-        </nav>
-      </header>
-    </>
+    <PageHeader
+      title="Add New Sales Agent"
+      toggleSidebar={toggleSidebar}
+    />
   );
 };
 
-export default AddAgentHeader
+export default AddAgentHeader;
