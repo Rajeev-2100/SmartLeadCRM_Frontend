@@ -4,10 +4,13 @@ import Footer from "../components/Footer";
 import { useContext, useEffect, useState } from "react";
 import LeadContext from "../context/LeadContext";
 import AgentsContext from "../context/AgentsContext";
+import { toast } from "react-toastify";
 
 const EditedManagement = () => {
   const { leadId } = useParams();
   const [showSidebar, setShowSidebar] = useState(true);
+
+  const toggleSidebar = () => setShowSidebar((prev) => !prev);
 
   const navigation = useNavigate();
 
@@ -15,9 +18,9 @@ const EditedManagement = () => {
 
   const { allAgents } = useContext(AgentsContext);
 
-  const displayLeads = newLeadData?.length > 0 ? newLeadData : allLeads;
+  const displayLeads = newLeadData?.length > 0 ? newLeadData : allLeads || [];
 
-  const leadDetails = displayLeads?.find((lead) => lead._id === leadId);
+  const leadDetails = displayLeads.find((lead) => lead._id === leadId);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -38,12 +41,21 @@ const EditedManagement = () => {
         status: leadDetails.status || "",
         priority: leadDetails.priority || "",
         timeToClose: leadDetails.timeToClose || 1,
-        tags: leadDetails.tags || "",
+        tags: Array.isArray(leadDetails.tags) ? leadDetails.tags[0] || "" : "",
       });
     }
   }, [leadDetails]);
 
-  const EditFormHandler = async (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "timeToClose" ? Number(value) : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { name, source, salesAgent, status, priority, timeToClose, tags } =
@@ -77,305 +89,185 @@ const EditedManagement = () => {
         `https://crm-backend-tawny.vercel.app/leads/${leadId}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         },
       );
+      
+      if(res.ok){
+        toast.success("Successfully, Edited the Lead Details");
+      }
+      
 
       const data = await res.json();
 
-      if (res.ok) {
-        alert("Lead Updated Successfully");
-
-        const updatedLeadList = allLeads.map((lead) =>
-          lead._id === leadId ? data.data : lead,
-        );
-
-        setNewLeadData(updatedLeadList);
-
-        navigation("/leads");
-      } else {
-        alert(data.message);
+      if (!res.ok) {
+        toast.error(result.message || "Something went wrong");
+        return;
       }
-    } catch (error) {
-      console.log(error);
 
-      alert("Something went wrong");
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "timeToClose" ? Number(value) : value,
-    }));
-  };
-
-  const formLeadHandler = async (e) => {
-    e.preventDefault();
-
-    const { name, source, salesAgent, status, priority, timeToClose, tags } =
-      formData;
-
-    if (
-      !name ||
-      !source ||
-      !salesAgent ||
-      !status ||
-      !priority ||
-      !timeToClose ||
-      !tags
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
-
-    try {
-      const res = await fetch(
-        `https://crm-backend-tawny.vercel.app/leads/${leadId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        },
+      setNewLeadData((prev) =>
+        (prev || allLeads).map((lead) =>
+          lead._id === leadId ? data.data : lead,
+        ),
       );
 
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Lead Updated Successfully");
-
-        const updatedLeadList = displayLeads?.map((lead) =>
-          lead._id === leadId ? data.data : lead,
-        );
-
-        setNewLeadData(updatedLeadList);
-
-        navigation("/leads");
-      } else {
-        alert(data.message);
-      }
+      navigation("/leads");
     } catch (error) {
       console.log(error);
-
-      alert("Something went wrong");
     }
   };
 
-  const uniqueAgents = [
-    ...new Map(allAgents?.map((agent) => [agent._id, agent])).values(),
-  ];
+  const uniqueAgents = [...new Map(allAgents?.map((a) => [a._id, a])).values()];
 
-  const uniquePriorities = [
-    ...new Set(displayLeads?.map((lead) => lead.priority)),
-  ];
+  const uniquePriorities = [...new Set(displayLeads.map((l) => l.priority))];
 
-  const uniqueStatus = [...new Set(displayLeads?.map((lead) => lead.status))];
+  const uniqueStatus = [...new Set(displayLeads.map((l) => l.status))];
 
-  const uniqueSources = [...new Set(displayLeads?.map((lead) => lead.source))];
+  const uniqueSources = [...new Set(displayLeads.map((l) => l.source))];
 
-  const uniqueTags = [
-    ...new Set(displayLeads?.flatMap((lead) => lead.tags || [])),
-  ];
+  const uniqueTags = [...new Set(displayLeads.flatMap((l) => l.tags || []))];
 
   return (
     <>
-      <EditedManagementHeader />
+      <EditedManagementHeader toggleSidebar={toggleSidebar} />
 
       <main
         className="container-fluid py-4"
-        style={{
-          backgroundColor: "#f4f7fb",
-          minHeight: "100vh",
-        }}
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
       >
-        <div className="row g-4">
+        <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
-              <div
-                className="bg-white shadow-sm rounded-4 p-4 h-100"
-                style={{
-                  minHeight: "85vh",
-                }}
-              >
+              <div className="bg-white shadow-sm rounded-4 p-4 h-100">
                 <h4 className="fw-bold text-center mb-4">Sidebar</h4>
-
                 <hr />
 
                 <div className="d-grid gap-3">
-                  <Link className="btn btn-outline-secondary rounded-3" to="/">
-                    Back to Dashboard
+                  <Link className="btn btn-outline-secondary" to="/">
+                    Dashboard
                   </Link>
-
-                  <Link
-                    className="btn btn-outline-primary rounded-3"
-                    to="/leads"
-                  >
-                    Back to Leads
+                  <Link className="btn btn-outline-primary" to="/leads">
+                    Leads
                   </Link>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="col-12 col-md-9">
-            <div className="bg-white shadow rounded-4 p-4 p-md-5">
-              <div className="mb-4 text-center">
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div
+              className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white"
+              style={{ height: "96vh" }}
+            >
+              <div className="text-center mb-4">
                 <h2 className="fw-bold">Edit Lead Management</h2>
-
-                <p className="text-secondary mb-0">
-                  Update lead information and manage sales details.
-                </p>
+                <p className="text-muted">Update lead information</p>
               </div>
+              <div className="w-75 mx-auto mt-3">
+                <form onSubmit={handleSubmit}>
+                  <div className="row g-3">
+                    <div className="col-12 mb-5">
+                      <input
+                        className="form-control"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="Lead Name"
+                      />
+                    </div>
 
-              <form onSubmit={formLeadHandler}>
-                <div className="row g-4">
-                  {/* Lead Name */}
-                  <div className="col-12">
-                    <label className="form-label fw-semibold">Lead Name</label>
+                    <div className="col-md-6  mb-5">
+                      <select
+                        className="form-select"
+                        name="source"
+                        value={formData.source}
+                        onChange={handleChange}
+                      >
+                        <option value="">Source</option>
+                        {uniqueSources.map((s, i) => (
+                          <option key={i}>{s}</option>
+                        ))}
+                      </select>
+                    </div>
 
-                    <input
-                      type="text"
-                      name="name"
-                      className="form-control form-control-lg"
-                      placeholder="Enter lead name"
-                      value={formData?.name || ""}
-                      onChange={handleChange}
-                    />
+                    <div className="col-md-6 mb-5">
+                      <select
+                        className="form-select"
+                        name="salesAgent"
+                        value={formData.salesAgent}
+                        onChange={handleChange}
+                      >
+                        <option value="">Agent</option>
+                        {uniqueAgents.map((a) => (
+                          <option key={a._id} value={a._id}>
+                            {a.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="col-md-6 mb-5">
+                      <select
+                        className="form-select"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                      >
+                        <option value="">Status</option>
+                        {uniqueStatus.map((s, i) => (
+                          <option key={i}>{s}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="col-md-6 mb-5">
+                      <select
+                        className="form-select"
+                        name="priority"
+                        value={formData.priority}
+                        onChange={handleChange}
+                      >
+                        <option value="">Priority</option>
+                        {uniquePriorities.map((p, i) => (
+                          <option key={i}>{p}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="col-md-6 mb-5">
+                      <input
+                        type="number"
+                        className="form-control"
+                        name="timeToClose"
+                        value={formData.timeToClose}
+                        onChange={handleChange}
+                        placeholder="Time To Close"
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-5">
+                      <select
+                        className="form-select"
+                        name="tags"
+                        value={formData.tags}
+                        onChange={handleChange}
+                      >
+                        <option value="">Tags</option>
+                        {uniqueTags.map((t, i) => (
+                          <option key={i}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="col-12 mb-5">
+                      <button className="btn btn-primary w-100">
+                        Update Lead
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">
-                      Lead Source
-                    </label>
-
-                    <select
-                      name="source"
-                      className="form-select form-select-lg"
-                      value={formData?.source || ""}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Source</option>
-
-                      {uniqueSources?.map((src, index) => (
-                        <option key={index} value={src}>
-                          {src}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">
-                      Sales Agent
-                    </label>
-
-                    <select
-                      name="salesAgent"
-                      className="form-select form-select-lg"
-                      value={formData?.salesAgent || ""}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Agent</option>
-
-                      {uniqueAgents?.map((agent) => (
-                        <option key={agent._id} value={agent._id}>
-                          {agent.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">
-                      Lead Status
-                    </label>
-
-                    <select
-                      name="status"
-                      className="form-select form-select-lg"
-                      value={formData?.status || ""}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Status</option>
-
-                      {uniqueStatus?.map((status, index) => (
-                        <option key={index} value={status}>
-                          {status}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Priority</label>
-
-                    <select
-                      name="priority"
-                      className="form-select form-select-lg"
-                      value={formData?.priority || ""}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Priority</option>
-
-                      {uniquePriorities?.map((priority, index) => (
-                        <option key={index} value={priority}>
-                          {priority}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">
-                      Time To Close
-                    </label>
-
-                    <input
-                      type="number"
-                      name="timeToClose"
-                      className="form-control form-control-lg"
-                      placeholder="Days"
-                      value={formData?.timeToClose || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Tags</label>
-
-                    <select
-                      name="tags"
-                      className="form-select form-select-lg"
-                      value={formData?.tags || ""}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Tag</option>
-
-                      {uniqueTags?.map((tag, index) => (
-                        <option key={index} value={tag}>
-                          {tag}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="col-12 pt-2">
-                    <button
-                      className="btn btn-primary btn-lg w-100 rounded-3"
-                      type="submit"
-                    >
-                      Update Lead
-                    </button>
-                  </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
         </div>

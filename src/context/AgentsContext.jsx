@@ -1,11 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import useFetch from "../useFetch";
 import LeadContext from "./LeadContext";
-
+import { toast } from "react-toastify";
 const AgentsContext = createContext();
 
 export function AgentsProvider({ children }) {
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -38,8 +37,8 @@ export function AgentsProvider({ children }) {
       const data = await res.json();
 
       if (res.ok) {
+        toast.success("Added new Agent in Sales Data");
         setSuccessMessage("Added new Agent in Sales Data");
-
         const updatedAgents =
           agentsState.length > 0
             ? [...agentsState, data?.data]
@@ -51,18 +50,22 @@ export function AgentsProvider({ children }) {
         setEmail("");
       }
     } catch (error) {
-      console.log(error);
+      toast.error(result.message || "Something went wrong");
+      return;
     }
   };
 
   const deleteListByAgent = async (agentName) => {
     try {
-      const res = await fetch(`https://crm-backend-tawny.vercel.app/agents/${agentName}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `https://crm-backend-tawny.vercel.app/agents/${agentName}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (res.ok) {
-        alert("Successfully Deleted Agent");
+        toast.success("Successfully Deleted Agent");
 
         const updatedAgents =
           agentsState.length > 0

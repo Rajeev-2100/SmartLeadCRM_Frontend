@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import useFetch from "../useFetch";
 import { useNavigate } from "react-router-dom";
 import AgentsContext from "./AgentsContext";
-
+import { toast } from "react-toastify";
 const LeadContext = createContext();
 
 export function LeadProvider({ children }) {
@@ -48,6 +48,17 @@ export function LeadProvider({ children }) {
     };
 
     try {
+      if (
+        !name ||
+        !leadSource ||
+        !salesAgentId ||
+        !status ||
+        !priority ||
+        !tags
+      ) {
+        toast.error("Please fill all details");
+        return;
+      }
       const res = await fetch("https://crm-backend-tawny.vercel.app/leads", {
         method: "POST",
         headers: {
@@ -59,7 +70,7 @@ export function LeadProvider({ children }) {
       const result = await res.json();
 
       if (res.ok) {
-        alert("Successfully Added the Lead Details");
+        toast.success("Lead added successfully");
 
         const selectedAgent = displayAgents.find(
           (agent) => agent._id === salesAgentId,
@@ -70,7 +81,7 @@ export function LeadProvider({ children }) {
           salesAgent: selectedAgent,
         };
 
-        console.log('New Leads: ',newLead)
+        console.log("New Leads: ", newLead);
 
         setAllLeads((prev) => [...prev, newLead]);
         setName("");
@@ -84,7 +95,8 @@ export function LeadProvider({ children }) {
         navigation("/leads");
       }
     } catch (error) {
-      console.log(error);
+      toast.error(result.message || "Something went wrong");
+      return;
     }
   };
 
@@ -98,7 +110,7 @@ export function LeadProvider({ children }) {
       );
 
       if (res.ok) {
-        alert("Successfully Deleted Lead");
+        toast.success("Lead deleted successfully");
 
         setAllLeads((prev) => {
           const updated = prev.filter((lead) => lead._id !== leadId);
@@ -109,7 +121,8 @@ export function LeadProvider({ children }) {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error(result.message || "Something went wrong");
+      return;
     }
   };
 
