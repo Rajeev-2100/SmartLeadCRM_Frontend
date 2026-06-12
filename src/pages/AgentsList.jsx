@@ -72,9 +72,7 @@ const AgentsList = () => {
           )}
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
-            <div
-              className="bg-danger rounded-4 shadow-lg p-4 p-md-5"
-            >
+            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5">
               {" "}
               <div className="text-center mb-5">
                 <h2 className="fw-bold text-dark">Lead List By Agent</h2>
@@ -153,48 +151,37 @@ const AgentsList = () => {
                   </select>
                 </div>
               </div>
-              <div className="row g-4">
+              <div className="row g-3">
                 {displayFilteredValue?.length > 0 ? (
-                  displayFilteredValue?.map((lead) => (
-                    <div className="col-12" key={lead._id}>
-                      <div
-                        className="rounded-4 p-4 shadow-sm border-0"
-                        style={{ backgroundColor: "#ffffff" }}
-                      >
-                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                          <div>
-                            <h5 className="fw-bold mb-1">{lead.name}</h5>
+                  displayFilteredValue.map((lead) => (
+                    <div className="col-12 col-md-6" key={lead._id}>
+                      <div className="bg-white rounded-4 shadow-sm p-3 h-100">
+                        <h5 className="fw-bold mb-2">{lead.name}</h5>
 
-                            <p className="text-muted mb-0">
-                              Assigned Agent:{" "}
-                              <span className="fw-semibold">
-                                {lead.salesAgent?.name || "No Assigned"}
-                              </span>
-                            </p>
-                          </div>
+                        <p className="mb-1">
+                          <strong>Agent:</strong>{" "}
+                          {lead.salesAgent?.name || "Not Assigned"}
+                        </p>
 
-                          <div className="d-flex gap-2 flex-wrap">
-                            <span className="badge bg-warning text-dark px-3 py-2">
-                              {lead.priority}
-                            </span>
+                        <div className="d-flex flex-wrap gap-2 mt-2">
+                          <span className="badge bg-warning text-dark">
+                            {lead.priority}
+                          </span>
 
-                            <span className="badge bg-success px-3 py-2">
-                              {lead.status}
-                            </span>
+                          <span className="badge bg-success">
+                            {lead.status}
+                          </span>
 
-                            <span className="badge bg-secondary px-3 py-2">
-                              {lead.timeToClose} Days
-                            </span>
-                          </div>
+                          <span className="badge bg-secondary">
+                            {lead.timeToClose} Days
+                          </span>
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="col-12">
-                    <div className="text-center py-5">
-                      <h5 className="text-secondary">No Leads Found</h5>
-                    </div>
+                  <div className="text-center py-5">
+                    <h5>No Leads Found</h5>
                   </div>
                 )}
               </div>
