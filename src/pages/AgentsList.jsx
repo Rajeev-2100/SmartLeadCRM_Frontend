@@ -66,6 +66,10 @@ const AgentsList = () => {
                   <Link className="btn btn-outline-secondary" to="/">
                     <h5 className="mb-0">Back to Dashboard</h5>
                   </Link>
+
+                  <Link className="btn btn-primary" to='/addNewAgents'>
+                   <h5>Add New Agent</h5>
+                  </Link>
                 </div>
               </div>
             </div>

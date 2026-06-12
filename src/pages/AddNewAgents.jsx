@@ -50,6 +50,7 @@ const AddNewAgents = () => {
               <div
                 className="mx-auto mt-3"
                 style={{
+                  height: '53vh',
                   maxWidth: "700px",
                   width: "100%",
                 }}
@@ -68,7 +69,7 @@ const AddNewAgents = () => {
                     />
                   </div>
 
-                  <div className="my-4">
+                  <div className="mb-4">
                     <label
                       htmlFor="agentEmail"
                       className="form-label fs-4 text-white"
@@ -83,8 +84,8 @@ const AddNewAgents = () => {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <button className="btn btn-primary my-4" type="submit">
+                  <div className="mt-4">
+                    <button className="btn btn-primary w-100" type="submit">
                       Submit Button
                     </button>
                   </div>

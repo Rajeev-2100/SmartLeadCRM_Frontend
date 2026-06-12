@@ -3,9 +3,11 @@ import Footer from "../components/Footer";
 import LeadContext from "../context/LeadContext";
 import AddLeadFormHeader from "../components/Header/AddLeadFormHeader";
 import { Link, useNavigate } from "react-router-dom";
+import AgentsContext from "../context/AgentsContext";
 
 const AddLeadForm = () => {
   const [showSidebar, setShowSidebar] = useState(true);
+  const { allAgents } = useContext(AgentsContext)
 
   const toggleSidebar = () => {
     setShowSidebar((prev) => !prev);
@@ -110,7 +112,7 @@ const AddLeadForm = () => {
                     >
                       <option value="">Select Sales Agent</option>
 
-                      {uniqueAgents?.map((agent) => (
+                      {allAgents?.map((agent) => (
                         <option key={agent._id} value={agent._id}>
                           {agent.name}
                         </option>

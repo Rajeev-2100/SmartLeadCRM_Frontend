@@ -134,7 +134,14 @@ export function LeadProvider({ children }) {
     ...new Map(
       allLeads
         .filter((lead) => lead.salesAgent)
-        .map((lead) => [lead.salesAgent._id, lead.salesAgent]),
+        .map((lead) => {
+          const agent =
+            typeof lead.salesAgent === "object"
+              ? lead.salesAgent
+              : { _id: lead.salesAgent, name: "Unknown Agent" };
+
+          return [agent._id, agent];
+        }),
     ).values(),
   ];
 

@@ -1,14 +1,15 @@
 const Footer = () => {
   return (
-    <>
-      <footer className="bg-body-tertiary py-3 mt-auto w-100">
-        <div className="container">
-          <p className="text-center m-0">
-            @ Lorem ipsum dolor sit amet consectetur adipisicing.
-          </p>
+    <footer className="bg-white text-dark py-3 mt-auto w-100 shadow">
+      <div className="container">
+        <div className="text-center">
+          <h6 className="mb-1 fs-6">CRM Dashboard</h6>
+          <small className="text-secondary">
+            © {new Date().getFullYear()} All rights reserved | Built with React
+          </small>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 };
 

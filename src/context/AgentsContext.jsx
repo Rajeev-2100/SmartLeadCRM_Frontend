@@ -2,12 +2,14 @@ import { createContext, useContext, useState } from "react";
 import useFetch from "../useFetch";
 import LeadContext from "./LeadContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const AgentsContext = createContext();
 
 export function AgentsProvider({ children }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigation = useNavigate();
 
   const [agentsState, setAgentsState] = useState([]);
 
@@ -38,7 +40,8 @@ export function AgentsProvider({ children }) {
 
       if (res.ok) {
         toast.success("Added new Agent in Sales Data");
-        setSuccessMessage("Added new Agent in Sales Data");
+        navigation("/leads");
+
         const updatedAgents =
           agentsState.length > 0
             ? [...agentsState, data?.data]
