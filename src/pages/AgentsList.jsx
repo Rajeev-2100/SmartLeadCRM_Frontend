@@ -11,7 +11,6 @@ const AgentsList = () => {
   const { allLeads } = useContext(LeadContext);
   const [showSidebar, setShowSidebar] = useState(true);
 
-  console.log("AllLead: ", allLeads);
   const [agentName, setAgentName] = useState("none");
   const [selectedCloseTime, setSelectedCloseTime] = useState("none");
   const [priorityValue, setPriorityValue] = useState("none");
@@ -32,12 +31,10 @@ const AgentsList = () => {
   });
 
   const displayFilteredValue = allFilteredLead;
-  console.log("displayFilteredValue: ", displayFilteredValue);
 
   const uniquePriority = [
     ...new Map(allLeads?.map((l) => [l.priority, l.priority])).values(),
   ];
-  console.log("uniquePriority: ", uniquePriority);
 
   const uniqueTimes = [
     ...new Map(allLeads?.map((lead) => [lead.timeToClose, lead])).values(),
@@ -67,8 +64,12 @@ const AgentsList = () => {
                     <h5 className="mb-0">Back to Dashboard</h5>
                   </Link>
 
-                  <Link className="btn btn-primary" to='/addNewAgents'>
-                   <h5>Add New Agent</h5>
+                  <Link
+                    className="btn"
+                    style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+                    to="/addNewAgents"
+                  >
+                    <h5 className="mb-0">Add New Agent</h5>
                   </Link>
                 </div>
               </div>
@@ -76,8 +77,10 @@ const AgentsList = () => {
           )}
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
-            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5">
-              {" "}
+            <div
+              className="rounded-4 shadow-lg p-4 p-md-5"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
               <div className="text-center mb-5">
                 <h2 className="fw-bold text-dark">Lead List By Agent</h2>
 
@@ -85,9 +88,10 @@ const AgentsList = () => {
                   Filter leads by agent, priority, and closing time.
                 </p>
               </div>
+
               <div
                 className="row g-4 mb-5 rounded-4 p-4 shadow-sm"
-                style={{ backgroundColor: "#ffffff" }}
+                style={{ backgroundColor: "#f8fafc" }}
               >
                 <div className="col-12 col-md-4">
                   <label htmlFor="agent" className="form-label fw-semibold">
@@ -155,11 +159,15 @@ const AgentsList = () => {
                   </select>
                 </div>
               </div>
+
               <div className="row g-3">
                 {displayFilteredValue?.length > 0 ? (
                   displayFilteredValue.map((lead) => (
                     <div className="col-12 col-md-6" key={lead._id}>
-                      <div className="bg-white rounded-4 shadow-sm p-3 h-100">
+                      <div
+                        className="rounded-4 shadow-sm p-3 h-100"
+                        style={{ backgroundColor: "#ffffff", border: "1px solid #eef1f6" }}
+                      >
                         <h5 className="fw-bold mb-2">{lead.name}</h5>
 
                         <p className="mb-1">
@@ -168,15 +176,24 @@ const AgentsList = () => {
                         </p>
 
                         <div className="d-flex flex-wrap gap-2 mt-2">
-                          <span className="badge bg-warning text-dark">
+                          <span
+                            className="badge"
+                            style={{ backgroundColor: "#ffedd5", color: "#9a3412" }}
+                          >
                             {lead.priority}
                           </span>
 
-                          <span className="badge bg-success">
+                          <span
+                            className="badge"
+                            style={{ backgroundColor: "#dcfce7", color: "#166534" }}
+                          >
                             {lead.status}
                           </span>
 
-                          <span className="badge bg-secondary">
+                          <span
+                            className="badge"
+                            style={{ backgroundColor: "#e0e7ff", color: "#3730a3" }}
+                          >
                             {lead.timeToClose} Days
                           </span>
                         </div>

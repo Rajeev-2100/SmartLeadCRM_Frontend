@@ -1,3 +1,4 @@
+// LeadManagement.jsx
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useContext, useState } from "react";
@@ -14,7 +15,7 @@ const LeadManagement = () => {
   };
 
   const { leadId } = useParams();
-  const { allLeads } = useContext(LeadContext);
+  const { allLeads, deletedLeadByLeadId } = useContext(LeadContext);
 
   const leadDetails = allLeads?.find((lead) => lead._id === leadId);
   const { displayAgents } = useContext(AgentsContext);
@@ -25,8 +26,6 @@ const LeadManagement = () => {
 
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-
-  console.log("All Leads Data: ", allLeads);
 
   const navigate = useNavigate();
 
@@ -103,7 +102,7 @@ const LeadManagement = () => {
 
       <main
         className="container-fluid py-3 pb-5"
-        style={{ minHeight: "100vh" }}
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
       >
         <div className="row g-3">
           {/* Sidebar */}
@@ -121,13 +120,19 @@ const LeadManagement = () => {
           )}
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
-            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
-              <h2 className="text-center fw-bold mb-4">Lead Details</h2>
+            <div
+              className="rounded-4 shadow-lg p-4 p-md-5"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
+              <h2 className="text-center fw-bold mb-4 text-dark">Lead Details</h2>
 
               {/* Info Cards */}
               <div className="row g-3 justify-content-center">
                 <div className="col-12 col-md-6 col-lg-5">
-                  <div className="bg-white text-dark rounded-4 shadow-sm p-3 h-100">
+                  <div
+                    className="text-dark rounded-4 shadow-sm p-3 h-100"
+                    style={{ backgroundColor: "#f8fafc" }}
+                  >
                     <p>
                       <strong>Lead Name:</strong> {leadDetails?.name}
                     </p>
@@ -145,7 +150,10 @@ const LeadManagement = () => {
                 </div>
 
                 <div className="col-12 col-md-6 col-lg-5">
-                  <div className="bg-white text-dark rounded-4 shadow-sm p-3 h-100">
+                  <div
+                    className="text-dark rounded-4 shadow-sm p-3 h-100"
+                    style={{ backgroundColor: "#f8fafc" }}
+                  >
                     <p>
                       <strong>Status:</strong> {leadDetails?.status}
                     </p>
@@ -163,7 +171,8 @@ const LeadManagement = () => {
               <div className="d-flex justify-content-center gap-3 mt-4 flex-wrap">
                 <Link
                   to={`/edited/${leadDetails?._id}`}
-                  className="btn btn-primary"
+                  className="btn"
+                  style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
                 >
                   Edit Lead
                 </Link>
@@ -173,7 +182,7 @@ const LeadManagement = () => {
                     deletedLeadByLeadId(leadDetails?._id);
                     navigate("/leads");
                   }}
-                  className="btn btn-dark"
+                  className="btn btn-outline-danger"
                 >
                   Delete Lead
                 </button>
@@ -213,7 +222,7 @@ const LeadManagement = () => {
                     value={selectedAuthorId || ""}
                     onChange={(e) => setSelectedAuthorId(e.target.value)}
                   >
-                    <option>Select Author</option>
+                    <option value="">Select Author</option>
                     {uniqueAgents?.map((agent) => (
                       <option key={agent._id} value={agent._id}>
                         {agent.name}
@@ -228,7 +237,12 @@ const LeadManagement = () => {
                     onChange={(e) => setComment(e.target.value)}
                   />
 
-                  <button className="btn btn-primary">Submit Comment</button>
+                  <button
+                    className="btn"
+                    style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+                  >
+                    Submit Comment
+                  </button>
                 </form>
               </div>
             </div>

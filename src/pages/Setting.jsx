@@ -1,3 +1,4 @@
+// Setting.jsx
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import SettingHeader from "../components/Header/SettingHeader";
@@ -21,7 +22,10 @@ const Setting = () => {
     <>
       <SettingHeader toggleSidebar={toggleSidebar} />
 
-      <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
+      <main
+        className="container-fluid py-3"
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
+      >
         <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
@@ -40,22 +44,31 @@ const Setting = () => {
           )}
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
-            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
+            <div
+              className="rounded-4 shadow-lg p-4 p-md-5"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
               <div className="text-center mb-5">
-                <h2 className="fw-bold">Settings Dashboard</h2>
+                <h2 className="fw-bold text-dark">Settings Dashboard</h2>
 
-                <p className="text-light mb-0">
+                <p className="text-muted mb-0">
                   Manage sales agents and lead records.
                 </p>
               </div>
 
               <div className="row g-4">
                 <div className="col-12 col-xl-6">
-                  <div className="bg-white shadow rounded-4 p-4 h-100">
+                  <div
+                    className="shadow rounded-4 p-4 h-100"
+                    style={{ backgroundColor: "#f8fafc" }}
+                  >
                     <div className="d-flex justify-content-between align-items-center mb-4">
                       <h3 className="fw-bold text-dark m-0">Sales Agents</h3>
 
-                      <span className="badge bg-primary fs-6 px-3 py-2">
+                      <span
+                        className="badge fs-6 px-3 py-2"
+                        style={{ backgroundColor: "#e0e7ff", color: "#3730a3" }}
+                      >
                         {allAgents?.length}
                       </span>
                     </div>
@@ -68,7 +81,7 @@ const Setting = () => {
                         displayAgents.map((agent) => (
                           <div
                             key={agent._id}
-                            className="shadow-sm rounded-4 p-3 mb-3 bg-light"
+                            className="shadow-sm rounded-4 p-3 mb-3 bg-white"
                           >
                             <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                               <div>
@@ -82,7 +95,7 @@ const Setting = () => {
                               </div>
 
                               <button
-                                className="btn btn-danger rounded-3 px-4"
+                                className="btn btn-outline-danger rounded-3 px-4"
                                 onClick={() => deleteListByAgent(agent.name)}
                               >
                                 Delete
@@ -102,11 +115,17 @@ const Setting = () => {
                 </div>
 
                 <div className="col-12 col-xl-6">
-                  <div className="bg-white shadow rounded-4 p-4 h-100">
+                  <div
+                    className="shadow rounded-4 p-4 h-100"
+                    style={{ backgroundColor: "#f8fafc" }}
+                  >
                     <div className="d-flex justify-content-between align-items-center mb-4">
                       <h3 className="fw-bold text-dark m-0">Lead Records</h3>
 
-                      <span className="badge bg-success fs-6 px-3 py-2">
+                      <span
+                        className="badge fs-6 px-3 py-2"
+                        style={{ backgroundColor: "#dcfce7", color: "#166534" }}
+                      >
                         {allLeads?.length}
                       </span>
                     </div>
@@ -119,7 +138,7 @@ const Setting = () => {
                         allLeads.map((lead) => (
                           <div
                             key={lead._id}
-                            className="shadow-sm rounded-4 p-3 mb-3 bg-light"
+                            className="shadow-sm rounded-4 p-3 mb-3 bg-white"
                           >
                             <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                               <div>
@@ -133,7 +152,7 @@ const Setting = () => {
                               </div>
 
                               <button
-                                className="btn btn-danger rounded-3 px-4"
+                                className="btn btn-outline-danger rounded-3 px-4"
                                 onClick={() => deletedLeadByLeadId(lead._id)}
                               >
                                 Delete

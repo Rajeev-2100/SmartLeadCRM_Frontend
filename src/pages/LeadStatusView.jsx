@@ -1,3 +1,4 @@
+// LeadStatusView.jsx
 import LeadStatusHeader from "../components/Header/LeadStatusHeader";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -45,15 +46,15 @@ const LeadStatusView = () => {
 
   return (
     <>
-      <LeadStatusHeader toggleSidebar={toggleSidebar}/>
+      <LeadStatusHeader toggleSidebar={toggleSidebar} />
       <main
         className="container-fluid py-3 pb-5"
-        style={{ minHeight: "100vh" }}
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
       >
         <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
-              <div className="bg-light border rounded p-4 h-100">
+              <div className="bg-white border rounded-4 p-4 h-100">
                 <h3 className="text-center mb-4">SideBar</h3>
 
                 <hr />
@@ -67,11 +68,17 @@ const LeadStatusView = () => {
             </div>
           )}
 
-          <div className={showSidebar ? "col-12 col-md-9" : 'col-12'}>
-            <div className="bg-danger rounded p-3 p-md-4 text-white">
-              <h2 className="fw-bold text-center mb-4">Lead List by Status</h2>
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div
+              className="rounded-4 shadow p-3 p-md-4"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
+              <h2 className="fw-bold text-center mb-4 text-dark">Lead List by Status</h2>
 
-              <div className="bg-light text-dark rounded p-3 mb-4">
+              <div
+                className="rounded-4 p-3 mb-4"
+                style={{ backgroundColor: "#f8fafc" }}
+              >
                 <div className="row g-3">
                   <div className="col-12 col-md-4">
                     <label htmlFor="status" className="form-label fw-bold">
@@ -142,7 +149,10 @@ const LeadStatusView = () => {
                 {displayFilteredValue?.length > 0 ? (
                   displayFilteredValue?.map((lead) => (
                     <div key={lead._id} className="col-12">
-                      <div className="card shadow-sm border-0">
+                      <div
+                        className="card shadow-sm border-0"
+                        style={{ backgroundColor: "#f8fafc" }}
+                      >
                         <div className="card-body">
                           <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
                             <div className="text-dark">
@@ -165,7 +175,8 @@ const LeadStatusView = () => {
                             <div>
                               <Link
                                 to={`/edited/${lead._id}`}
-                                className="btn btn-primary w-100"
+                                className="btn w-100"
+                                style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
                               >
                                 Edit
                               </Link>

@@ -1,3 +1,4 @@
+// AddLeadForm.jsx
 import { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import LeadContext from "../context/LeadContext";
@@ -7,7 +8,7 @@ import AgentsContext from "../context/AgentsContext";
 
 const AddLeadForm = () => {
   const [showSidebar, setShowSidebar] = useState(true);
-  const { allAgents } = useContext(AgentsContext)
+  const { allAgents } = useContext(AgentsContext);
 
   const toggleSidebar = () => {
     setShowSidebar((prev) => !prev);
@@ -42,7 +43,10 @@ const AddLeadForm = () => {
     <>
       <AddLeadFormHeader toggleSidebar={toggleSidebar} />
 
-      <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
+      <main
+        className="container-fluid py-3"
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
+      >
         <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
@@ -58,21 +62,24 @@ const AddLeadForm = () => {
           )}
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
-            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
+            <div
+              className="rounded-4 shadow p-4 p-md-5"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
               <h3 className="fs-2 text-center mb-4">Lead Management Form</h3>
 
-              <div className="w-75 mx-auto mt-3">
+              <div className="col-12 col-md-10 col-lg-8 mx-auto">
                 <form onSubmit={formLeadHandler}>
                   <div className="mb-4">
                     <label
                       htmlFor="name"
-                      className="form-label fs-4 text-white"
+                      className="form-label fs-5 text-dark fw-semibold"
                     >
                       Lead Name
                     </label>
 
                     <input
-                      className="form-control form-control-lg"
+                      className="form-control form-control-lg rounded-3"
                       type="text"
                       placeholder="Enter Lead Name"
                       value={name || ""}
@@ -81,12 +88,12 @@ const AddLeadForm = () => {
                   </div>
 
                   <div className="my-4">
-                    <label className="form-label fs-4 text-white">
+                    <label className="form-label fs-5 text-dark fw-semibold">
                       Lead Source
                     </label>
 
                     <select
-                      className="form-select form-select-lg"
+                      className="form-select form-select-lg rounded-3"
                       value={leadSource || ""}
                       onChange={(e) => setLeadSource(e.target.value)}
                     >
@@ -101,12 +108,12 @@ const AddLeadForm = () => {
                   </div>
 
                   <div className="my-4">
-                    <label className="form-label fs-4 text-white">
+                    <label className="form-label fs-5 text-dark fw-semibold">
                       Sales Agent
                     </label>
 
                     <select
-                      className="form-select form-select-lg"
+                      className="form-select form-select-lg rounded-3"
                       value={salesAgentId || ""}
                       onChange={(e) => setSalesAgentId(e.target.value)}
                     >
@@ -121,12 +128,12 @@ const AddLeadForm = () => {
                   </div>
 
                   <div className="my-4">
-                    <label className="form-label fs-4 text-white">
+                    <label className="form-label fs-5 text-dark fw-semibold">
                       Lead Status
                     </label>
 
                     <select
-                      className="form-select form-select-lg"
+                      className="form-select form-select-lg rounded-3"
                       value={status || ""}
                       onChange={(e) => setStatus(e.target.value)}
                     >
@@ -141,12 +148,12 @@ const AddLeadForm = () => {
                   </div>
 
                   <div className="my-4">
-                    <label className="form-label fs-4 text-white">
+                    <label className="form-label fs-5 text-dark fw-semibold">
                       Priority
                     </label>
 
                     <select
-                      className="form-select form-select-lg"
+                      className="form-select form-select-lg rounded-3"
                       value={priority || ""}
                       onChange={(e) => setPriority(e.target.value)}
                     >
@@ -161,12 +168,12 @@ const AddLeadForm = () => {
                   </div>
 
                   <div className="my-4">
-                    <label className="form-label fs-4 text-white">
+                    <label className="form-label fs-5 text-dark fw-semibold">
                       Time To Close
                     </label>
 
                     <input
-                      className="form-control form-control-lg"
+                      className="form-control form-control-lg rounded-3"
                       type="number"
                       placeholder="Days to close"
                       value={timeToClose || ""}
@@ -175,10 +182,12 @@ const AddLeadForm = () => {
                   </div>
 
                   <div className="my-4">
-                    <label className="form-label fs-4 text-white">Tags</label>
+                    <label className="form-label fs-5 text-dark fw-semibold">
+                      Tags
+                    </label>
 
                     <select
-                      className="form-select form-select-lg"
+                      className="form-select form-select-lg rounded-3"
                       value={tags || ""}
                       onChange={(e) => setTags(e.target.value)}
                     >
@@ -194,8 +203,8 @@ const AddLeadForm = () => {
 
                   <div className="text-center mt-5">
                     <button
-                      className="btn btn-primary px-5 py-2 fw-bold"
-                      style={{ width: "30vw" }}
+                      className="btn w-100 py-2 fw-bold"
+                      style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
                       type="submit"
                     >
                       Create Lead

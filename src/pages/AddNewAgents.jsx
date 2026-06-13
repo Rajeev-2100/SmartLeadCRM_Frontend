@@ -1,3 +1,4 @@
+// AddNewAgents.jsx
 import { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import AddAgentHeader from "../components/Header/AddAgentHeader";
@@ -24,12 +25,11 @@ const AddNewAgents = () => {
     setSuccessMessage,
     successMessage,
   } = useContext(AgentsContext);
-  // console.log('Full Agent Data: ', allAgents)
 
   return (
     <>
       <AddAgentHeader toggleSidebar={toggleSidebar} title="Add New Lead" />
-      <main className="container-fluid py-3">
+      <main className="container-fluid py-3" style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}>
         <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
@@ -45,12 +45,15 @@ const AddNewAgents = () => {
           )}
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
-            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
+            <div
+              className="rounded-4 shadow-lg p-4 p-md-5"
+              style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+            >
               <h3 className="fs-2 text-center mb-4">Sales Agent Form</h3>
               <div
                 className="mx-auto mt-3"
                 style={{
-                  height: '53vh',
+                  height: "53vh",
                   maxWidth: "700px",
                   width: "100%",
                 }}
@@ -70,10 +73,7 @@ const AddNewAgents = () => {
                   </div>
 
                   <div className="mb-4">
-                    <label
-                      htmlFor="agentEmail"
-                      className="form-label fs-4 text-white"
-                    >
+                    <label htmlFor="agentEmail" className="form-label fs-4 text-white">
                       Email Address:{" "}
                     </label>
                     <input
@@ -85,7 +85,11 @@ const AddNewAgents = () => {
                     />
                   </div>
                   <div className="mt-4">
-                    <button className="btn btn-primary w-100" type="submit">
+                    <button
+                      className="btn w-100"
+                      style={{ backgroundColor: "#ffffff", color: "#4f6ef7", fontWeight: 600 }}
+                      type="submit"
+                    >
                       Submit Button
                     </button>
                   </div>

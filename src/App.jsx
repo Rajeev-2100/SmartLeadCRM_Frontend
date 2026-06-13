@@ -26,11 +26,14 @@ function App() {
     <>
       <MainHeader toggleSidebar={toggleSidebar} />
 
-      <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
-        <div className='row g-3'>
+      <main
+        className="container-fluid py-3"
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
+      >
+        <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
-              <div className="border rounded p-4 bg-light h-100">
+              <div className="bg-white shadow rounded-4 p-4 h-100">
                 <h3 className="text-center mb-4">SideBar</h3>
 
                 <div className="d-flex flex-column gap-3 text-center">
@@ -57,16 +60,18 @@ function App() {
               </div>
             </div>
           )}
-    
 
-          <div className={showSidebar ? "col-12 col-md-9" : 'col-12'}>
-            <div className="bg-danger rounded p-3 p-md-4 text-white w-100">
-              <h3 className="text-center mb-4">Main Content</h3>
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div
+              className="rounded-4 shadow-lg p-3 p-md-4 w-100"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
+              <h3 className="text-center mb-4 text-dark">Main Content</h3>
 
               <div className="row g-3">
                 {filteredStatus?.map((lead) => (
                   <div key={lead._id} className="col-12 col-sm-6 col-lg-4">
-                    <div className="card h-100 shadow-sm">
+                    <div className="card h-100 shadow-sm border-0" style={{ backgroundColor: "#f8fafc" }}>
                       <div className="card-body text-dark">
                         <h5 className="card-title">{lead.name}</h5>
 
@@ -83,16 +88,16 @@ function App() {
                 ))}
               </div>
 
-              <hr className="border-light my-4" />
+              <hr className="my-4" />
 
-              <div className="bg-light text-dark rounded p-3">
-                <h5>Lead Status</h5>
+              <div className="rounded-4 p-3" style={{ backgroundColor: "#f8fafc" }}>
+                <h5 className="text-dark">Lead Status</h5>
 
                 <div className="d-flex flex-wrap gap-3 mt-3">
                   {leadsStatus?.map((item) => (
                     <div
                       key={item._id}
-                      className="border rounded px-3 py-2 bg-white"
+                      className="border rounded-3 px-3 py-2 bg-white text-dark"
                     >
                       <strong>{item._id}</strong>: {item.count} Leads
                     </div>
@@ -100,10 +105,10 @@ function App() {
                 </div>
               </div>
 
-              <hr className="border-light my-4" />
+              <hr className="my-4" />
 
-              <div className="bg-light text-dark rounded p-3">
-                <label htmlFor="statusFilter" className="form-label fw-bold">
+              <div className="rounded-4 p-3" style={{ backgroundColor: "#f8fafc" }}>
+                <label htmlFor="statusFilter" className="form-label fw-bold text-dark">
                   Quick Filters
                 </label>
 
@@ -122,13 +127,12 @@ function App() {
                 </select>
               </div>
 
-              <div
-                className="my-3 w-100"
-                style={{
-                  minWidth: "unset",
-                }}
-              >
-                <Link to={`/addleadform`} className="btn btn-primary w-100">
+              <div className="my-3 w-100">
+                <Link
+                  to={`/addleadform`}
+                  className="btn w-100"
+                  style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+                >
                   Add New Lead
                 </Link>
               </div>

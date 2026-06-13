@@ -1,3 +1,4 @@
+// EditedManagement.jsx
 import { Link, useNavigate, useParams } from "react-router-dom";
 import EditedManagementHeader from "../components/Header/EditedManagementHeader";
 import Footer from "../components/Footer";
@@ -93,18 +94,15 @@ const EditedManagement = () => {
           body: JSON.stringify(payload),
         },
       );
-      
-      if(res.ok){
-        toast.success("Successfully, Edited the Lead Details");
-      }
-      
 
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(result.message || "Something went wrong");
+        toast.error(data.message || "Something went wrong");
         return;
       }
+
+      toast.success("Successfully, Edited the Lead Details");
 
       setNewLeadData((prev) =>
         (prev || allLeads).map((lead) =>
@@ -147,7 +145,11 @@ const EditedManagement = () => {
                   <Link className="btn btn-outline-secondary" to="/">
                     Dashboard
                   </Link>
-                  <Link className="btn btn-outline-primary" to="/leads">
+                  <Link
+                    className="btn"
+                    style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+                    to="/leads"
+                  >
                     Leads
                   </Link>
                 </div>
@@ -157,11 +159,11 @@ const EditedManagement = () => {
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
             <div
-              className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white"
-              style={{ height: "96vh" }}
+              className="rounded-4 shadow-lg p-4 p-md-5"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef", height: "96vh" }}
             >
               <div className="text-center mb-4">
-                <h2 className="fw-bold">Edit Lead Management</h2>
+                <h2 className="fw-bold text-dark">Edit Lead Management</h2>
                 <p className="text-muted">Update lead information</p>
               </div>
               <div className="w-75 mx-auto mt-3">
@@ -261,7 +263,10 @@ const EditedManagement = () => {
                     </div>
 
                     <div className="col-12 mb-5">
-                      <button className="btn btn-primary w-100">
+                      <button
+                        className="btn w-100"
+                        style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+                      >
                         Update Lead
                       </button>
                     </div>

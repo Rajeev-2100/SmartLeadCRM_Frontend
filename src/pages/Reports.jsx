@@ -1,3 +1,4 @@
+// Reports.jsx
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import ReportHeader from "../components/Header/ReportHeader";
@@ -39,11 +40,14 @@ const Reports = () => {
 
           <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
             <div className="d-flex flex-column gap-4">
-              <div className="bg-danger shadow rounded-4 p-4 p-md-5">
+              <div
+                className="shadow rounded-4 p-4 p-md-5"
+                style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+              >
                 <div className="text-center">
                   <h2 className="fw-bold text-dark">Reports Dashboard</h2>
 
-                  <p className="text-white mb-5 fs-5">
+                  <p className="text-muted mb-5 fs-5">
                     Visual overview of leads and sales performance.
                   </p>
                 </div>
@@ -63,8 +67,9 @@ const Reports = () => {
 
                         <div className="d-flex justify-content-center">
                           <div
-                            className="bg-light rounded-4 shadow-sm p-4"
+                            className="rounded-4 shadow-sm p-4"
                             style={{
+                              backgroundColor: "#f8fafc",
                               width: "100%",
                               maxWidth: "500px",
                             }}
@@ -89,8 +94,9 @@ const Reports = () => {
 
                         <div className="d-flex justify-content-center">
                           <div
-                            className="bg-light rounded-4 shadow-sm p-4"
+                            className="rounded-4 shadow-sm p-4"
                             style={{
+                              backgroundColor: "#f8fafc",
                               width: "100%",
                               maxWidth: "500px",
                             }}
@@ -104,9 +110,9 @@ const Reports = () => {
                 </div>
 
                 <div>
-                  <h2 className="fw-bold text-center">Status Of Closed Lead</h2>
+                  <h2 className="fw-bold text-center text-dark">Status Of Closed Lead</h2>
 
-                  <p className="text-white mb-3 text-center">
+                  <p className="text-muted mb-3 text-center">
                     Visual representation of all lead statuses in the CRM
                     system.
                   </p>
@@ -114,8 +120,9 @@ const Reports = () => {
 
                 <div className="d-flex justify-content-center">
                   <div
-                    className="bg-light rounded-4 shadow-sm p-4"
+                    className="rounded-4 shadow-sm p-4"
                     style={{
+                      backgroundColor: "#f8fafc",
                       width: "100%",
                       maxWidth: "450px",
                     }}

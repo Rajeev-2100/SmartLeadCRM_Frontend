@@ -1,3 +1,4 @@
+// Leads.jsx
 import Footer from "../components/Footer";
 import { useContext, useState } from "react";
 import LeadContext from "../context/LeadContext";
@@ -45,9 +46,12 @@ const Leads = () => {
 
   return (
     <>
-      <LeadListHeader toggleSidebar={toggleSidebar}/>
+      <LeadListHeader toggleSidebar={toggleSidebar} />
 
-      <main className="container-fluid py-3" style={{ minHeight: "100vh" }}>
+      <main
+        className="container-fluid py-3"
+        style={{ backgroundColor: "#f4f7fb", minHeight: "100vh" }}
+      >
         <div className="row g-3">
           {showSidebar && (
             <div className="col-12 col-md-3">
@@ -62,11 +66,17 @@ const Leads = () => {
             </div>
           )}
 
-          <div className={showSidebar ? 'col-12 col-md-9' : 'col-12'}>
-            <div className="bg-danger rounded-4 shadow-lg p-4 p-md-5 text-white">
-              <h2 className="fw-bold text-center mb-4">Leads Management</h2>
+          <div className={showSidebar ? "col-12 col-md-9" : "col-12"}>
+            <div
+              className="rounded-4 shadow-lg p-4 p-md-5"
+              style={{ backgroundColor: "#ffffff", border: "1px solid #e3e8ef" }}
+            >
+              <h2 className="fw-bold text-center mb-4 text-dark">Leads Management</h2>
 
-              <div className="bg-light text-dark rounded p-3 mb-4">
+              <div
+                className="rounded-4 p-3 mb-4"
+                style={{ backgroundColor: "#f8fafc" }}
+              >
                 <div className="row g-3">
                   <div className="col-12 col-md-4">
                     <label htmlFor="status" className="form-label fw-bold">
@@ -137,7 +147,10 @@ const Leads = () => {
                 {filteredLeads?.length > 0 ? (
                   filteredLeads?.map((lead) => (
                     <div key={lead._id} className="col-12">
-                      <div className="card shadow-sm border-0">
+                      <div
+                        className="card shadow-sm border-0"
+                        style={{ backgroundColor: "#f8fafc" }}
+                      >
                         <div className="card-body">
                           <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                             <div className="text-dark">
@@ -160,7 +173,8 @@ const Leads = () => {
                             <div>
                               <Link
                                 to={`/leads/${lead._id}`}
-                                className="btn btn-primary w-100"
+                                className="btn w-100"
+                                style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
                               >
                                 Open Details
                               </Link>
@@ -178,7 +192,11 @@ const Leads = () => {
               </div>
 
               <div className="w-100 add-lead-btn my-5 ">
-                <Link to={`/addleadform`} className="btn btn-primary w-100">
+                <Link
+                  to={`/addleadform`}
+                  className="btn w-100"
+                  style={{ backgroundColor: "#4f6ef7", color: "#fff" }}
+                >
                   Add New Lead
                 </Link>
               </div>
