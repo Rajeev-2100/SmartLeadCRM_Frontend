@@ -4,7 +4,7 @@ import PageHeader from "./PageHeader";
 const MainHeader = ({ toggleSidebar }) => {
   return (
     <PageHeader
-      title="CRM Management"
+      title="SmartLead CRM"
       toggleSidebar={toggleSidebar}
     />
   );
