@@ -167,7 +167,7 @@ const LeadStatusView = () => {
                               </p>
 
                               <p className="mb-0">
-                                <strong>Agent:</strong>{" "}
+                                <strong>LeadOwner:</strong>{" "}
                                 {lead.salesAgent?.name || "No Agent Assigned"}
                               </p>
                             </div>

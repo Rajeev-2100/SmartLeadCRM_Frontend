@@ -169,7 +169,8 @@ const EditedManagement = () => {
               <div className="w-75 mx-auto mt-3">
                 <form onSubmit={handleSubmit}>
                   <div className="row g-3">
-                    <div className="col-12 mb-5">
+                    <div className="col-12 mb-3">
+                      <label htmlFor="name"><b>Lead Name: </b></label>
                       <input
                         className="form-control"
                         name="name"
@@ -179,7 +180,8 @@ const EditedManagement = () => {
                       />
                     </div>
 
-                    <div className="col-md-6  mb-5">
+                    <div className="col-md-6  mb-3">
+                      <label htmlFor="source"><b>Source: </b></label>
                       <select
                         className="form-select"
                         name="source"
@@ -193,7 +195,8 @@ const EditedManagement = () => {
                       </select>
                     </div>
 
-                    <div className="col-md-6 mb-5">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="agentName"><b>Lead Owner Name: </b></label>
                       <select
                         className="form-select"
                         name="salesAgent"
@@ -209,7 +212,8 @@ const EditedManagement = () => {
                       </select>
                     </div>
 
-                    <div className="col-md-6 mb-5">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="status"><b>Lead Status: </b></label>
                       <select
                         className="form-select"
                         name="status"
@@ -223,7 +227,8 @@ const EditedManagement = () => {
                       </select>
                     </div>
 
-                    <div className="col-md-6 mb-5">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="priority"><b>Priority: </b></label>
                       <select
                         className="form-select"
                         name="priority"
@@ -237,18 +242,20 @@ const EditedManagement = () => {
                       </select>
                     </div>
 
-                    <div className="col-md-6 mb-5">
+                    <div className="col-md-6 mb-3">
+                      <label htmlFor="timeToClose"><b>Time of Close Days: </b></label>
                       <input
                         type="number"
                         className="form-control"
                         name="timeToClose"
                         value={formData.timeToClose}
                         onChange={handleChange}
-                        placeholder="Time To Close"
+                        placeholder="Days To Close"
                       />
                     </div>
 
-                    <div className="col-md-6 mb-5">
+                    <div className="col-md-6 mb-4">
+                      <label htmlFor="tags"><b>Tags: </b></label>
                       <select
                         className="form-select"
                         name="tags"

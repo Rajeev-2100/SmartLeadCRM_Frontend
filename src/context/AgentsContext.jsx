@@ -78,7 +78,7 @@ export function AgentsProvider({ children }) {
         setAgentsState(updatedAgents);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(result.message || "Something went wrong");
     }
   };
 
