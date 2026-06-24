@@ -149,7 +149,7 @@ const AgentsList = () => {
                     className="form-select form-select-lg"
                     onChange={(e) => setSelectedCloseTime(e.target.value)}
                   >
-                    <option value="none">Select Time</option>
+                    <option value="none">Select Timing Days</option>
 
                     {uniqueTimes?.map((lead, index) => (
                       <option key={index} value={lead.timeToClose}>

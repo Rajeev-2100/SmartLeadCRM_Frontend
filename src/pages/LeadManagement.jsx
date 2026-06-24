@@ -6,6 +6,8 @@ import LeadContext from "../context/LeadContext";
 import useFetch from "../useFetch";
 import ManagementHeader from "../components/Header/ManagementHeader";
 import AgentsContext from "../context/AgentsContext";
+import { toast } from "react-toastify";
+
 
 const LeadManagement = () => {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -13,6 +15,8 @@ const LeadManagement = () => {
   const toggleSidebar = () => {
     setShowSidebar((prev) => !prev);
   };
+  console.log('Show SIderBar: ',showSidebar)
+
 
   const { leadId } = useParams();
   const { allLeads, deletedLeadByLeadId } = useContext(LeadContext);
@@ -42,12 +46,12 @@ const LeadManagement = () => {
     e.preventDefault();
 
     if (comment.trim() === "") {
-      alert("Comment cannot be empty");
+      toast.error("Comment cannot be empty");
       return;
     }
 
     if (!selectedAuthorId) {
-      alert("Please select author");
+      toast.error("Please select author");
       return;
     }
 
@@ -71,7 +75,7 @@ const LeadManagement = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("New Comment Added Successfully");
+        toast.success("New Comment Added Successfully");
 
         const selectedAgent = displayAgents.find(
           (agent) => agent._id === selectedAuthorId,

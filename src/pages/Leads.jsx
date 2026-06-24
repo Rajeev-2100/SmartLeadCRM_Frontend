@@ -131,11 +131,11 @@ const Leads = () => {
                       className="form-select"
                       onChange={(e) => setSelectedCloseTime(e.target.value)}
                     >
-                      <option value="none">Select Time</option>
+                      <option value="none">Select Timing Days</option>
 
                       {uniqueTimes?.map((time, index) => (
                         <option key={index} value={time}>
-                          {time}
+                          {time} Days
                         </option>
                       ))}
                     </select>

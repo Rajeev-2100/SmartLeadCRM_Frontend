@@ -42,7 +42,7 @@ function App() {
                   </Link>
 
                   <Link className="btn btn-outline-secondary" to="/salesView">
-                    Sales
+                    LeadList
                   </Link>
 
                   <Link className="btn btn-outline-secondary" to="/agents">

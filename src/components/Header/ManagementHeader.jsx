@@ -6,10 +6,10 @@ import PageHeader from "./PageHeader";
 
 const ManagementHeader = ({ toggleSidebar }) => {
   const { leadId } = useParams();
-  const { leads } = useContext(LeadContext);
+  const { allLeads } = useContext(LeadContext);
 
-  const filteredLead = leads?.find((lead) => lead._id === leadId);
-  // console.log(filteredLead)
+  const filteredLead = allLeads?.find((lead) => lead._id === leadId);
+  console.log('Filtered Lead: ',filteredLead)
 
   return (
     <>
