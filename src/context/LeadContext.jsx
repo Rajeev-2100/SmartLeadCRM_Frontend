@@ -28,7 +28,7 @@ export function LeadProvider({ children }) {
   const [tagInput, setTagInput] = useState("");
 
   // Fetch leads
-  const { data, loading: fetchLoading, error: fetchError } = useFetch(`${hostedUrl}/leads`);
+  const { data, loading: fetchLoading, error: fetchError } = useFetch(`${hostedUrl}/api/all-leads`);
   
   // Fetch status counts
   const { data: statusValue } = useFetch(`${hostedUrl}/leads/status-count`);
